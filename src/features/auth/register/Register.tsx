@@ -1,9 +1,18 @@
 import React from "react";
+import {useAppDispatch} from "app/hooks";
+import {authThunks} from "features/auth/auth.slice";
 
 export const Register = () => {
-  return (
-    <div>
-      <h1>Register</h1>
-    </div>
-  );
+    const dispatch = useAppDispatch();
+
+    const registerHandler = () => {
+        dispatch(authThunks.register());
+    };
+
+    return (
+        <div>
+            <h2>Register</h2>
+            <button onClick={registerHandler}>register</button>
+        </div>
+    );
 };
