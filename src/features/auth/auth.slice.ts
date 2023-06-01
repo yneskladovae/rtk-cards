@@ -40,6 +40,8 @@ const login = createAsyncThunk(
 const slice = createSlice({
   name: "auth",
   initialState: {
+    isReg: false,
+    isLoading: false,
     profile: null as ProfileType | null,
   },
   reducers: {
@@ -50,7 +52,21 @@ const slice = createSlice({
       state.profile = action.payload.profile;
     },
   },
-  extraReducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(register.fulfilled, (state, action) => {
+        state.isReg = true;
+        state.isLoading = false;
+      })
+      .addCase(register.pending, (state, action) => {
+        state.isReg = false;
+        state.isLoading = true;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isReg = false;
+      });
+  },
 });
 
 export const authReducer = slice.reducer;

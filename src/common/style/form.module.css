@@ -17,23 +17,29 @@
     margin: 0 auto;
 }
 
-input[type="checkbox"] {
+.checkbox {
     margin: 0 12px 0 0;
     height: 18px;
     width: 18px;
 }
 
 .email, .password {
-    min-width: 300px;
+    min-width: 300px!important;
+}
+
+.button {
+    width: 100% !important;
+    border-radius: 30px!important;
+    font-size: 16px!important;
+    margin-top: 60px!important;
 }
 
 @media (max-width: 405px) {
     .email, .password {
-        min-width: 250px;
+        min-width: 250px!important;
     }
 
-    .registerBlock {
+    .formBlock {
         max-width: 300px;
-
     }
 }
