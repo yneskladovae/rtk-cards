@@ -3,12 +3,26 @@ import {
   ArgForgotPasswordType,
   ArgLoginType,
   ArgRegisterType,
+  ArgSetNewPasswordType,
   authApi,
   ForgotPasswordResponseType,
   ProfileType,
   RegisterResponseType,
 } from "features/auth/auth.api";
 import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
+
+const setNewPassword = createAppAsyncThunk<
+  ForgotPasswordResponseType,
+  ArgSetNewPasswordType
+>("auth/set-new-password", async (arg: ArgSetNewPasswordType, thunkAPI) => {
+  const { dispatch, rejectWithValue } = thunkAPI;
+  try {
+    const res = await authApi.setNewPassword(arg);
+    return res.data;
+  } catch (e) {
+    return rejectWithValue(e);
+  }
+});
 
 const forgotPassword = createAppAsyncThunk<
   ForgotPasswordResponseType,
@@ -69,4 +83,4 @@ const slice = createSlice({
 
 export const authReducer = slice.reducer;
 export const authActions = slice.actions;
-export const authThunks = { register, login, forgotPassword };
+export const authThunks = { register, login, forgotPassword, setNewPassword };

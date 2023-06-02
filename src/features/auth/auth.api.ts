@@ -13,6 +13,17 @@ export const authApi = {
       arg
     );
   },
+  setNewPassword(arg: ArgSetNewPasswordType) {
+    return instance.post<ForgotPasswordResponseType>(
+      "https://neko-back.herokuapp.com/2.0/auth/set-new-password",
+      arg
+    );
+  },
+};
+
+export type ArgSetNewPasswordType = {
+  password: string;
+  resetPasswordToken: string | undefined;
 };
 
 export type ArgForgotPasswordType = {
