@@ -104,7 +104,7 @@ const Login = () => {
             />
             Remember me
           </label>
-          <NavLink className={s.forgot} to={"/forgot"}>
+          <NavLink className={s.forgot} to={"/forgot-password"}>
             Forgot Password?
           </NavLink>
           <Button
