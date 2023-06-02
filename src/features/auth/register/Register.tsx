@@ -4,9 +4,8 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import TextField from "@mui/material/TextField";
-import { Navigate, NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { LinearProgress } from "@mui/material";
 import s from "./register.module.css";
 import formStyle from "../../../common/style/form.module.css";
 
@@ -16,8 +15,7 @@ type Inputs = {
   confirm_password: string;
 };
 export const Register = () => {
-  const isLoading = useAppSelector((state) => state.auth.isLoading);
-  const isReg = useAppSelector((state) => state.auth.isReg);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const {
@@ -40,18 +38,19 @@ export const Register = () => {
       email: data.email,
       password: data.password,
     };
-    dispatch(authThunks.register(payload));
+    dispatch(authThunks.register(payload))
+      .unwrap()
+      .then(() => {
+        return navigate("/login");
+      });
   };
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     registerHandler(data);
     // reset();
   };
 
-  if (isReg) return <Navigate to={"/login"} />;
-
   return (
     <>
-      {isLoading && <LinearProgress />}
       <div className={formStyle.formBlock}>
         <div className={formStyle.formContainer}>
           <h2>Sign up</h2>

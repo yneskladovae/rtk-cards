@@ -6,7 +6,7 @@ import {
   ProfileType,
   RegisterResponseType,
 } from "features/auth/auth.api";
-import { createAppAsyncThunk } from "utils/create-app-async-thunk";
+import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
 
 const register = createAppAsyncThunk<RegisterResponseType, ArgRegisterType>(
   "auth/register",
@@ -21,14 +21,14 @@ const register = createAppAsyncThunk<RegisterResponseType, ArgRegisterType>(
   }
 );
 
-const login = createAppAsyncThunk<ProfileType, ArgLoginType>(
+const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>(
   "auth/login",
   async (arg: ArgLoginType, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI;
+    const { rejectWithValue } = thunkAPI;
     try {
-      const res = await authApi.login(arg);
-      dispatch(authActions.setProfile({ profile: res.data }));
-      return res.data;
+      return await authApi.login(arg).then((res) => {
+        return { profile: res.data };
+      });
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -38,30 +38,13 @@ const login = createAppAsyncThunk<ProfileType, ArgLoginType>(
 const slice = createSlice({
   name: "auth",
   initialState: {
-    isReg: false,
-    isLogin: false,
-    isLoading: false,
     profile: null as ProfileType | null,
   },
-  reducers: {
-    setProfile(state, action: PayloadAction<{ profile: ProfileType }>) {
-      state.profile = action.payload.profile;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(register.fulfilled, (state, action) => {
-        state.isReg = true;
-        state.isLoading = false;
-      })
-      .addCase(register.pending, (state, action) => {
-        state.isReg = false;
-        state.isLoading = true;
-      })
-      .addCase(register.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isReg = false;
-      });
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.profile = action.payload.profile;
+    });
   },
 });
 

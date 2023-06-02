@@ -1,12 +1,11 @@
 import React from "react";
 import s from "./Header.module.css";
-import { useAppSelector } from "app/hooks";
 import logo from "../../assets/svg/logo.svg";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 
 export const Header = () => {
-  const isLogin = useAppSelector((state) => state.auth.isLogin);
+  const isLogin = false;
   return (
     <header className={s.headerBlock}>
       <div className={s.headerContainer}>
