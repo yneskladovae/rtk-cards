@@ -1,16 +1,14 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ArgLoginType,
   ArgRegisterType,
   authApi,
   ProfileType,
+  RegisterResponseType,
 } from "features/auth/auth.api";
+import { createAppAsyncThunk } from "utils/create-app-async-thunk";
 
-const register = createAsyncThunk(
+const register = createAppAsyncThunk<RegisterResponseType, ArgRegisterType>(
   "auth/register",
   async (arg: ArgRegisterType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI;
@@ -23,7 +21,7 @@ const register = createAsyncThunk(
   }
 );
 
-const login = createAsyncThunk(
+const login = createAppAsyncThunk<ProfileType, ArgLoginType>(
   "auth/login",
   async (arg: ArgLoginType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI;
@@ -46,10 +44,7 @@ const slice = createSlice({
     profile: null as ProfileType | null,
   },
   reducers: {
-    setProfile(
-      state,
-      action: PayloadAction<{ profile: ProfileType }>
-    ) {
+    setProfile(state, action: PayloadAction<{ profile: ProfileType }>) {
       state.profile = action.payload.profile;
     },
   },

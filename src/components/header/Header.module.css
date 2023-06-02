@@ -3,12 +3,13 @@
 }
 
 .headerContainer {
-    height: 60px;
-    max-width: 1280px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0 auto;
+    height: 60px;
+    max-width: 1280px;
+    padding: 0 10px;
 }
 
 .logo {
@@ -33,4 +34,10 @@
 
 .login {
 
+}
+
+@media (max-width: 375px) {
+    .logo img{
+        max-width: 85%;
+    }
 }

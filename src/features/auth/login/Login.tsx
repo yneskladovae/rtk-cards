@@ -14,10 +14,12 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useAppDispatch } from "app/hooks";
+import { authThunks } from "features/auth/auth.slice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-
+  const dispatch = useAppDispatch();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -38,7 +40,14 @@ const Login = () => {
     },
   });
 
-  const loginHandler = (data: ArgLoginType) => {};
+  const loginHandler = (data: ArgLoginType) => {
+    const payload = {
+      email: data.email,
+      password: data.password,
+      rememberMe: data.rememberMe,
+    };
+    dispatch(authThunks.login(payload));
+  };
   const onSubmit: SubmitHandler<ArgLoginType> = (data) => loginHandler(data);
 
   return (
@@ -65,6 +74,10 @@ const Login = () => {
                 Password
               </InputLabel>
               <Input
+                {...register("password", {
+                  required: true,
+                  maxLength: 20,
+                })}
                 id="standard-adornment-password"
                 className={formStyle.password}
                 type={showPassword ? "text" : "password"}
@@ -82,17 +95,6 @@ const Login = () => {
                 }
               />
             </FormControl>
-            {/*<TextField*/}
-            {/*  {...register("password", {*/}
-            {/*    required: true,*/}
-            {/*    maxLength: 20,*/}
-            {/*  })}*/}
-            {/*  id="register-password"*/}
-            {/*  label="Password"*/}
-            {/*  variant="standard"*/}
-            {/*  type={"password"}*/}
-            {/*  className={formStyle.password}*/}
-            {/*/>*/}
           </div>
           <label className={s.checkbox}>
             <input
