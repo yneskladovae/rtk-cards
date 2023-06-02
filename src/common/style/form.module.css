@@ -24,19 +24,38 @@
 }
 
 .email, .password {
-    min-width: 300px!important;
+    min-width: 300px !important;
+    margin-bottom: 10px !important;
 }
 
 .button {
     width: 100% !important;
-    border-radius: 30px!important;
-    font-size: 16px!important;
-    margin-top: 60px!important;
+    height: 36px !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    color: #FFFFFF !important;
+    margin-top: 60px !important;
+    background: #366EFF !important;
+    box-shadow: 0px 4px 18px rgba(54, 110, 255, 0.35), inset 0px 1px 0px rgba(255, 255, 255, 0.3) !important;
+    border-radius: 30px !important;
+}
+
+.link {
+    font-weight: 600;
+    line-height: 24px;
+    font-size: 16px;
+    text-decoration-line: underline;
+    color: #366EFF;
+}
+
+.email, .password, .css-v4u5.MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-formControl.css-v4u5dn-MuiInputBase-root-MuiInput-rootdn-MuiInputBase-root-MuiInput-root::before{
+    border-bottom: 1px solid rgb(0 0 0 / 15%) !important;
 }
 
 @media (max-width: 405px) {
     .email, .password {
-        min-width: 250px!important;
+        min-width: 250px !important;
     }
 
     .formBlock {

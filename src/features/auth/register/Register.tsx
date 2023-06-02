@@ -32,16 +32,15 @@ export const Register = () => {
       email: "",
       password: "",
     },
-    mode: "all",
+    mode: "onSubmit",
   });
 
   const registerHandler = (data: Inputs) => {
-    dispatch(
-      authThunks.register({
-        email: data.email,
-        password: data.password,
-      })
-    );
+    const payload = {
+      email: data.email,
+      password: data.password,
+    };
+    dispatch(authThunks.register(payload));
   };
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     registerHandler(data);
@@ -97,9 +96,7 @@ export const Register = () => {
                 type={"password"}
                 className={formStyle.password}
                 error={!!errors?.password}
-                helperText={
-                  errors?.password && errors.password.message
-                }
+                helperText={errors?.password && errors.password.message}
               />
             </div>
             <div>
@@ -125,22 +122,21 @@ export const Register = () => {
                 type={"password"}
                 className={formStyle.password}
                 error={!!errors?.password}
-                helperText={
-                  errors?.password && errors.password.message
-                }
+                helperText={errors?.password && errors.password.message}
               />
             </div>
             <Button
               className={formStyle.button}
               type="submit"
               variant="contained"
-              // disabled={isLoading}
               disabled={!isValid}
             >
               Sign Up
             </Button>
-            <p>Already have an account?</p>
-            <NavLink to={"/login"}>Sign In</NavLink>
+            <p className={s.registerText}>Already have an account?</p>
+            <NavLink className={formStyle.link} to={"/login"}>
+              Sign In
+            </NavLink>
           </form>
           <DevTool control={control} />
         </div>

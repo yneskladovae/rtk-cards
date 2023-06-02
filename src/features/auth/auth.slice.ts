@@ -18,7 +18,7 @@ const register = createAsyncThunk(
       const res = await authApi.register(arg);
       return res.data;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e);
+      return rejectWithValue(e);
     }
   }
 );
@@ -32,7 +32,7 @@ const login = createAsyncThunk(
       dispatch(authActions.setProfile({ profile: res.data }));
       return res.data;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e);
+      return rejectWithValue(e);
     }
   }
 );
@@ -41,6 +41,7 @@ const slice = createSlice({
   name: "auth",
   initialState: {
     isReg: false,
+    isLogin: false,
     isLoading: false,
     profile: null as ProfileType | null,
   },
