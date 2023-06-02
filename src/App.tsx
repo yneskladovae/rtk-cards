@@ -8,13 +8,13 @@ import {
 import "./App.css";
 import Login from "features/auth/login/Login";
 import { Register } from "features/auth/register/Register";
-import { ForgotPassword } from "features/auth/forgotPassword/ForgotPassword";
 import { SetNewPassword } from "features/auth/setNewPassword/SetNewPassword";
 import { Profile } from "features/profile/Profile";
 import { Packs } from "features/packs/Packs";
 import { Cards } from "features/cards/Cards";
 import { Learn } from "features/learn/Learn";
 import Layout from "components/layout/Layout";
+import { ForgotPassword } from "features/auth/forgotPassword/ForgotPassword";
 
 const router = createBrowserRouter([
   {
