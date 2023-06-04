@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
   ArgEditUserType,
   ArgForgotPasswordType,
@@ -10,10 +10,10 @@ import {
   ForgotPasswordResponseType,
   LogoutResponseType,
   ProfileType,
-  RegisterResponseType,
 } from "features/auth/auth.api";
 import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
 import { toast } from "react-toastify";
+import { thunkTryCatch } from "common/utils/thunk-try-catch";
 
 export const setNewPassword = createAppAsyncThunk<
   ForgotPasswordResponseType,
@@ -41,31 +41,24 @@ export const forgotPassword = createAppAsyncThunk<
   }
 });
 
-export const register = createAppAsyncThunk<
-  RegisterResponseType,
-  ArgRegisterType
->("auth/register", async (arg: ArgRegisterType, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
-  try {
-    const res = await authApi.register(arg);
-    return res.data;
-  } catch (e) {
-    return rejectWithValue(e);
+export const register = createAppAsyncThunk<void, ArgRegisterType>(
+  "auth/register",
+  async (arg: ArgRegisterType, thunkAPI) => {
+    return thunkTryCatch(thunkAPI, async () => {
+      const res = await authApi.register(arg);
+      return res.data;
+    });
   }
-});
+);
 
 export const login = createAppAsyncThunk<
   { profile: ProfileType },
   ArgLoginType
 >("auth/login", async (arg: ArgLoginType, thunkAPI) => {
-  const { rejectWithValue } = thunkAPI;
-  try {
-    return await authApi.login(arg).then((res) => {
-      return { profile: res.data };
-    });
-  } catch (e) {
-    return rejectWithValue(e);
-  }
+  return thunkTryCatch(thunkAPI, async () => {
+    const res = await authApi.login(arg);
+    return { profile: res.data };
+  });
 });
 
 export const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(
