@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 import "./App.css";
 import Login from "features/auth/login/Login";
@@ -15,6 +16,8 @@ import { Learn } from "features/learn/Learn";
 import Layout from "components/layout/Layout";
 import { ForgotPassword } from "features/auth/forgotPassword/ForgotPassword";
 import SetNewPassword from "features/auth/setNewPassword/SetNewPassword";
+import { useAppDispatch } from "app/hooks";
+import { authThunks } from "features/auth/auth.slice";
 
 const router = createBrowserRouter([
   {

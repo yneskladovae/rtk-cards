@@ -1,6 +1,9 @@
 import { instance } from "common/api/common.api";
 
 export const authApi = {
+  authMe() {
+    return instance.post<ProfileType>("auth/me");
+  },
   register(arg: ArgRegisterType) {
     return instance.post<RegisterResponseType>("auth/register", arg);
   },

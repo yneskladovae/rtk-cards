@@ -64,11 +64,24 @@ const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>(
   }
 );
 
+const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(
+  "auth/authMe",
+  async (arg, thunkAPI) => {
+    try {
+      const res = await authApi.authMe();
+      return { profile: res.data };
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
 const slice = createSlice({
   name: "auth",
   initialState: {
     profile: null as ProfileType | null,
     isForgotPassword: false,
+    isLogin: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -78,9 +91,19 @@ const slice = createSlice({
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
       state.isForgotPassword = true;
     });
+    builder.addCase(authMe.fulfilled, (state, action) => {
+      state.isLogin = true;
+      state.profile = action.payload.profile;
+    });
   },
 });
 
 export const authReducer = slice.reducer;
 export const authActions = slice.actions;
-export const authThunks = { register, login, forgotPassword, setNewPassword };
+export const authThunks = {
+  register,
+  login,
+  forgotPassword,
+  setNewPassword,
+  authMe,
+};

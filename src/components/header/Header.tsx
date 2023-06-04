@@ -3,9 +3,12 @@ import s from "./Header.module.css";
 import logo from "../../assets/svg/logo.svg";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import { useAppSelector } from "app/hooks";
 
 export const Header = () => {
-  const isLogin = false;
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+  const profile = useAppSelector((state) => state.auth.profile);
+  console.log(profile?.name);
   return (
     <header className={s.headerBlock}>
       <div className={s.headerContainer}>
@@ -21,7 +24,7 @@ export const Header = () => {
             </Button>
           </div>
         ) : (
-          <div>Profile</div>
+          <div>{profile?.name}</div>
         )}
       </div>
     </header>
