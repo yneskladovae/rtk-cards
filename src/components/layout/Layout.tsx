@@ -12,7 +12,6 @@ const Layout = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    toast("loaded secsses");
     dispatch(authThunks.authMe())
       .unwrap()
       .then(() => {

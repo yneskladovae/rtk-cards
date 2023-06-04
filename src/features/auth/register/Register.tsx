@@ -42,6 +42,9 @@ export const Register = () => {
       .unwrap()
       .then(() => {
         return navigate("/login");
+      })
+      .catch((e) => {
+        return e;
       });
   };
   const onSubmit: SubmitHandler<Inputs> = (data) => {

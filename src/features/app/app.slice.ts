@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isAxiosError } from "axios/index";
+import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { authThunks } from "features/auth/auth.slice";
 
@@ -15,16 +15,26 @@ const slice = createSlice({
       state.isLoading = action.payload.isLoading;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(authThunks.register.rejected, (state, action) => {
-  //     if (isAxiosError(action.payload)) {
-  //       state.error = "An error has occurred.";
-  //       toast.error("An error has occurred.");
-  //       return;
-  //     }
-  //     // state.error = action.payload?.response?.data?.error;
-  //   });
-  // },
+  extraReducers: (builder) => {
+    builder.addCase(authThunks.register.rejected, (state, action) => {
+      if (!isAxiosError(action.payload)) {
+        state.error = "An error has occurred.";
+        toast.error("An error has occurred.");
+        return;
+      }
+      state.error = action.payload?.response?.data?.error;
+      toast.error(action.payload?.response?.data?.error);
+    });
+    builder.addCase(authThunks.login.rejected, (state, action) => {
+      if (!isAxiosError(action.payload)) {
+        state.error = "An error has occurred.";
+        toast.error("An error has occurred.");
+        return;
+      }
+      state.error = action.payload?.response?.data?.error;
+      toast.error(action.payload?.response?.data?.error);
+    });
+  },
 });
 
 export const appReducer = slice.reducer;

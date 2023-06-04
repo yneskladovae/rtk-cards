@@ -29,11 +29,7 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ArgLoginType>({
+  const { register, handleSubmit } = useForm<ArgLoginType>({
     defaultValues: {
       email: "",
       password: "",
@@ -51,6 +47,9 @@ const Login = () => {
       .unwrap()
       .then(() => {
         globalRouter.navigate && globalRouter.navigate("/profile");
+      })
+      .catch((e) => {
+        return e;
       });
   };
   const onSubmit: SubmitHandler<ArgLoginType> = (data) => loginHandler(data);

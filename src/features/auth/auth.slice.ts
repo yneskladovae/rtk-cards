@@ -13,10 +13,9 @@ import {
   RegisterResponseType,
 } from "features/auth/auth.api";
 import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
-import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
-const setNewPassword = createAppAsyncThunk<
+export const setNewPassword = createAppAsyncThunk<
   ForgotPasswordResponseType,
   ArgSetNewPasswordType
 >("auth/set-new-password", async (arg: ArgSetNewPasswordType, thunkAPI) => {
@@ -29,7 +28,7 @@ const setNewPassword = createAppAsyncThunk<
   }
 });
 
-const forgotPassword = createAppAsyncThunk<
+export const forgotPassword = createAppAsyncThunk<
   ForgotPasswordResponseType,
   ArgForgotPasswordType
 >("auth/forgot", async (arg: ArgForgotPasswordType, thunkAPI) => {
@@ -42,34 +41,34 @@ const forgotPassword = createAppAsyncThunk<
   }
 });
 
-const register = createAppAsyncThunk<RegisterResponseType, ArgRegisterType>(
-  "auth/register",
-  async (arg: ArgRegisterType, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI;
-    try {
-      const res = await authApi.register(arg);
-      return res.data;
-    } catch (e) {
-      return rejectWithValue(e);
-    }
+export const register = createAppAsyncThunk<
+  RegisterResponseType,
+  ArgRegisterType
+>("auth/register", async (arg: ArgRegisterType, thunkAPI) => {
+  const { dispatch, rejectWithValue } = thunkAPI;
+  try {
+    const res = await authApi.register(arg);
+    return res.data;
+  } catch (e) {
+    return rejectWithValue(e);
   }
-);
+});
 
-const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>(
-  "auth/login",
-  async (arg: ArgLoginType, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI;
-    try {
-      return await authApi.login(arg).then((res) => {
-        return { profile: res.data };
-      });
-    } catch (e: any) {
-      return rejectWithValue(e.response.data.error);
-    }
+export const login = createAppAsyncThunk<
+  { profile: ProfileType },
+  ArgLoginType
+>("auth/login", async (arg: ArgLoginType, thunkAPI) => {
+  const { rejectWithValue } = thunkAPI;
+  try {
+    return await authApi.login(arg).then((res) => {
+      return { profile: res.data };
+    });
+  } catch (e) {
+    return rejectWithValue(e);
   }
-);
+});
 
-const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(
+export const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(
   "auth/authMe",
   async (arg, thunkAPI) => {
     try {
@@ -81,7 +80,7 @@ const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(
   }
 );
 
-const logout = createAppAsyncThunk<LogoutResponseType, void>(
+export const logout = createAppAsyncThunk<LogoutResponseType, void>(
   "auth/logout",
   async (arg, thunkAPI) => {
     try {
@@ -93,31 +92,34 @@ const logout = createAppAsyncThunk<LogoutResponseType, void>(
   }
 );
 
-const editUser = createAppAsyncThunk<EditUserResponseType, ArgEditUserType>(
-  "auth/editUser",
-  async (arg, thunkAPI) => {
-    try {
-      const res = await authApi.editUser(arg);
-      return res.data;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e);
-    }
+export const editUser = createAppAsyncThunk<
+  EditUserResponseType,
+  ArgEditUserType
+>("auth/editUser", async (arg, thunkAPI) => {
+  try {
+    const res = await authApi.editUser(arg);
+    return res.data;
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e);
   }
-);
+});
 
-const slice = createSlice({
+export const slice = createSlice({
   name: "auth",
   initialState: {
     profile: null as ProfileType | null,
     isForgotPassword: false,
     isLogin: false,
-    error: null as null | string,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLogin = true;
       state.profile = action.payload.profile;
+      toast.success("You have successfully logged in.");
+    });
+    builder.addCase(register.fulfilled, (state, action) => {
+      toast.success("You have successfully registered!");
     });
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
       state.isForgotPassword = true;
@@ -129,6 +131,7 @@ const slice = createSlice({
     builder.addCase(logout.fulfilled, (state, action) => {
       state.isLogin = false;
       state.profile = null;
+      toast.success("You have successfully logged out!");
     });
     builder.addCase(editUser.fulfilled, (state, action) => {
       state.profile = action.payload.updatedUser;
