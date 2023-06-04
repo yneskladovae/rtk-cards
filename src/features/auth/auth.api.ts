@@ -4,6 +4,9 @@ export const authApi = {
   authMe() {
     return instance.post<ProfileType>("auth/me");
   },
+  logout() {
+    return instance.delete<LogoutResponseType>("auth/me");
+  },
   register(arg: ArgRegisterType) {
     return instance.post<RegisterResponseType>("auth/register", arg);
   },
@@ -27,6 +30,11 @@ export const authApi = {
 export type ArgSetNewPasswordType = {
   password: string;
   resetPasswordToken: string | undefined;
+};
+
+export type LogoutResponseType = {
+  info: string;
+  error: string;
 };
 
 export type ArgForgotPasswordType = {

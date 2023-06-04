@@ -8,7 +8,6 @@ import { useAppSelector } from "app/hooks";
 export const Header = () => {
   const isLogin = useAppSelector((state) => state.auth.isLogin);
   const profile = useAppSelector((state) => state.auth.profile);
-  console.log(profile?.name);
   return (
     <header className={s.headerBlock}>
       <div className={s.headerContainer}>

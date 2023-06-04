@@ -16,6 +16,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAppDispatch } from "app/hooks";
 import { authThunks } from "features/auth/auth.slice";
+import globalRouter from "globalRouter";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -46,7 +47,11 @@ const Login = () => {
       password: data.password,
       rememberMe: data.rememberMe,
     };
-    dispatch(authThunks.login(payload));
+    dispatch(authThunks.login(payload))
+      .unwrap()
+      .then(() => {
+        globalRouter.navigate && globalRouter.navigate("/profile");
+      });
   };
   const onSubmit: SubmitHandler<ArgLoginType> = (data) => loginHandler(data);
 

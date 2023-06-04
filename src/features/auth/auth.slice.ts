@@ -6,6 +6,7 @@ import {
   ArgSetNewPasswordType,
   authApi,
   ForgotPasswordResponseType,
+  LogoutResponseType,
   ProfileType,
   RegisterResponseType,
 } from "features/auth/auth.api";
@@ -76,6 +77,18 @@ const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(
   }
 );
 
+const logout = createAppAsyncThunk<LogoutResponseType, void>(
+  "auth/logout",
+  async (arg, thunkAPI) => {
+    try {
+      const res = await authApi.logout();
+      return res.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
 const slice = createSlice({
   name: "auth",
   initialState: {
@@ -86,14 +99,18 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
+      state.isLogin = true;
       state.profile = action.payload.profile;
     });
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
       state.isForgotPassword = true;
     });
     builder.addCase(authMe.fulfilled, (state, action) => {
-      state.isLogin = true;
       state.profile = action.payload.profile;
+    });
+    builder.addCase(logout.fulfilled, (state, action) => {
+      state.isLogin = false;
+      state.profile = null;
     });
   },
 });
@@ -106,4 +123,5 @@ export const authThunks = {
   forgotPassword,
   setNewPassword,
   authMe,
+  logout,
 };
