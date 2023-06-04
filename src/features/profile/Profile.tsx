@@ -15,7 +15,7 @@ export const Profile = () => {
   const dispatch = useAppDispatch();
   const [toggle, setToggle] = useState<boolean>(false);
   const [newName, setNewName] = useState<string | undefined>(profile?.name);
-  console.log(newName);
+  console.log(toggle);
 
   const editModeHandler = () => {
     setToggle(!toggle);
@@ -48,7 +48,7 @@ export const Profile = () => {
             <img src={changePhoto} alt="Change photo icon" />
           </span>
         </div>
-        {!toggle ? (
+        {toggle ? (
           <div className={s.userNameBlockChanging}>
             <TextField
               id="change-nickname"

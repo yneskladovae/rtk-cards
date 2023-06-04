@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "components/header/Header";
 import { useAppDispatch } from "app/hooks";
 import { authThunks } from "features/auth/auth.slice";
+import { toast, ToastContainer } from "react-toastify";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Layout = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    toast("loaded secsses");
     dispatch(authThunks.authMe())
       .unwrap()
       .then(() => {

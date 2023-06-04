@@ -13,6 +13,8 @@ import {
   RegisterResponseType,
 } from "features/auth/auth.api";
 import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
+import { isAxiosError } from "axios";
+import { toast } from "react-toastify";
 
 const setNewPassword = createAppAsyncThunk<
   ForgotPasswordResponseType,
@@ -61,8 +63,8 @@ const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>(
       return await authApi.login(arg).then((res) => {
         return { profile: res.data };
       });
-    } catch (e) {
-      return rejectWithValue(e);
+    } catch (e: any) {
+      return rejectWithValue(e.response.data.error);
     }
   }
 );
@@ -109,6 +111,7 @@ const slice = createSlice({
     profile: null as ProfileType | null,
     isForgotPassword: false,
     isLogin: false,
+    error: null as null | string,
   },
   reducers: {},
   extraReducers: (builder) => {
