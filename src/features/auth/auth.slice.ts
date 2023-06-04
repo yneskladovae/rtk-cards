@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  ArgEditUserType,
   ArgForgotPasswordType,
   ArgLoginType,
   ArgRegisterType,
   ArgSetNewPasswordType,
   authApi,
+  EditUserResponseType,
   ForgotPasswordResponseType,
   LogoutResponseType,
   ProfileType,
@@ -89,6 +91,18 @@ const logout = createAppAsyncThunk<LogoutResponseType, void>(
   }
 );
 
+const editUser = createAppAsyncThunk<EditUserResponseType, ArgEditUserType>(
+  "auth/editUser",
+  async (arg, thunkAPI) => {
+    try {
+      const res = await authApi.editUser(arg);
+      return res.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
 const slice = createSlice({
   name: "auth",
   initialState: {
@@ -106,11 +120,15 @@ const slice = createSlice({
       state.isForgotPassword = true;
     });
     builder.addCase(authMe.fulfilled, (state, action) => {
+      state.isLogin = true;
       state.profile = action.payload.profile;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.isLogin = false;
       state.profile = null;
+    });
+    builder.addCase(editUser.fulfilled, (state, action) => {
+      state.profile = action.payload.updatedUser;
     });
   },
 });
@@ -124,4 +142,5 @@ export const authThunks = {
   setNewPassword,
   authMe,
   logout,
+  editUser,
 };

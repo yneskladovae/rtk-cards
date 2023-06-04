@@ -7,6 +7,9 @@ export const authApi = {
   logout() {
     return instance.delete<LogoutResponseType>("auth/me");
   },
+  editUser(arg: ArgEditUserType) {
+    return instance.put<EditUserResponseType>("auth/me", arg);
+  },
   register(arg: ArgRegisterType) {
     return instance.post<RegisterResponseType>("auth/register", arg);
   },
@@ -25,6 +28,16 @@ export const authApi = {
       arg
     );
   },
+};
+
+export type EditUserResponseType = {
+  updatedUser: ProfileType;
+  error?: string;
+};
+
+export type ArgEditUserType = {
+  name?: string;
+  avatar?: string;
 };
 
 export type ArgSetNewPasswordType = {

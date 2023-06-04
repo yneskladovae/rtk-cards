@@ -14,6 +14,35 @@
     cursor: pointer;
 }
 
+.userNameBlockChanging{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.saveButton {
+    position: absolute;
+    right: 0;
+    background: #366EFF;
+    border-radius: 2px;
+}
+
+.saveButton button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 24px;
+    background: #366EFF;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .userNameBlock {
     display: flex;
     align-items: end;
@@ -31,6 +60,7 @@
 .editPencil {
     margin-left: 10px;
     line-height: 16px;
+    cursor: pointer;
 }
 
 .userEmailBlock {

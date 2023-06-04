@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import formStyle from "common/style/form.module.css";
 import TextField from "@mui/material/TextField";
 import s from "./Profile.module.css";
@@ -7,13 +7,29 @@ import changePhoto from "../../assets/svg/changePhoto.svg";
 import pencil from "../../assets/svg/pencil.svg";
 import logout from "../../assets/svg/logout.svg";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { NavLink } from "react-router-dom";
 import { authThunks } from "features/auth/auth.slice";
 import globalRouter from "globalRouter";
 
 export const Profile = () => {
   const profile = useAppSelector((state) => state.auth.profile);
   const dispatch = useAppDispatch();
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [newName, setNewName] = useState<string | undefined>(profile?.name);
+  console.log(newName);
+
+  const editModeHandler = () => {
+    setToggle(!toggle);
+  };
+
+  const getNewNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewName(e.currentTarget.value);
+  };
+
+  const setNewNameHandler = () => {
+    dispatch(authThunks.editUser({ name: newName }));
+    setToggle(!toggle);
+  };
+
   const logoutHandler = () => {
     dispatch(authThunks.logout())
       .unwrap()
@@ -32,12 +48,28 @@ export const Profile = () => {
             <img src={changePhoto} alt="Change photo icon" />
           </span>
         </div>
-        <div className={s.userNameBlock}>
-          <div className={s.userName}>{profile?.name}</div>
-          <div className={s.editPencil}>
-            <img src={pencil} alt="Pencil" />
+        {!toggle ? (
+          <div className={s.userNameBlockChanging}>
+            <TextField
+              id="change-nickname"
+              label="Nickname"
+              variant="standard"
+              className={formStyle.email}
+              value={newName}
+              onChange={getNewNameHandler}
+            />
+            <div className={s.saveButton}>
+              <button onClick={setNewNameHandler}>SAVE</button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={s.userNameBlock}>
+            <div className={s.userName}>{profile?.name}</div>
+            <div className={s.editPencil}>
+              <img onClick={editModeHandler} src={pencil} alt="Pencil" />
+            </div>
+          </div>
+        )}
         <div className={s.userEmailBlock}>
           <div className={s.userEmail}>{profile?.email}</div>
         </div>
@@ -47,14 +79,7 @@ export const Profile = () => {
             Log out
           </button>
         </div>
-        <div>
-          <TextField
-            id="register-email"
-            label="Email"
-            variant="standard"
-            className={formStyle.email}
-          />
-        </div>
+        <div></div>
       </div>
     </div>
   );
