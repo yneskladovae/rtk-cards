@@ -3,7 +3,7 @@ import s from "./Header.module.css";
 import logo from "../../assets/svg/logo.svg";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
-import { useAppSelector } from "app/hooks";
+import { useAppSelector } from "common/hooks/useAppSelector";
 
 export const Header = () => {
   const isLogin = useAppSelector((state) => state.auth.isLogin);

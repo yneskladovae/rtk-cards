@@ -14,9 +14,9 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useAppDispatch } from "app/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import globalRouter from "globalRouter";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);

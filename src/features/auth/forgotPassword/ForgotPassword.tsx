@@ -1,5 +1,4 @@
 import React from "react";
-import { useAppDispatch, useAppSelector } from "app/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import { NavLink, useParams } from "react-router-dom";
@@ -7,11 +6,10 @@ import Button from "@mui/material/Button";
 import email from "../../../assets/svg/email.svg";
 import formStyle from "../../../common/style/form.module.css";
 import s from "./ForgotPassword.module.css";
-import {
-  ArgForgotPasswordType,
-  ForgotPasswordResponseType,
-} from "features/auth/auth.api";
+import { ArgForgotPasswordType } from "features/auth/auth.api";
 import { authThunks } from "features/auth/auth.slice";
+import { useAppSelector } from "common/hooks/useAppSelector";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 export const ForgotPassword = () => {
   const isForgotPassword = useAppSelector(

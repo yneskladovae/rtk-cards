@@ -6,9 +6,10 @@ import avatar from "../../assets/img/avatar.jpg";
 import changePhoto from "../../assets/svg/changePhoto.svg";
 import pencil from "../../assets/svg/pencil.svg";
 import logout from "../../assets/svg/logout.svg";
-import { useAppDispatch, useAppSelector } from "app/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import globalRouter from "globalRouter";
+import { useAppSelector } from "common/hooks/useAppSelector";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 export const Profile = () => {
   const profile = useAppSelector((state) => state.auth.profile);

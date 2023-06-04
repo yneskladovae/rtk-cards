@@ -1,13 +1,13 @@
 import React from "react";
 import { authThunks } from "features/auth/auth.slice";
-import { useAppDispatch, useAppSelector } from "app/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import TextField from "@mui/material/TextField";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import s from "./register.module.css";
 import formStyle from "../../../common/style/form.module.css";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 type Inputs = {
   email: string;

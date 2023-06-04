@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import globalRouter from "globalRouter";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "components/header/Header";
-import { useAppDispatch, useAppSelector } from "app/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import LinearProgress from "@mui/material/LinearProgress";
-import { Preloader } from "components/preloader/Preloader";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { useAppSelector } from "common/hooks/useAppSelector";
 
 const Layout = () => {
   const navigate = useNavigate();

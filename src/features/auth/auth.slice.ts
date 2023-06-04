@@ -11,9 +11,8 @@ import {
   LogoutResponseType,
   ProfileType,
 } from "features/auth/auth.api";
-import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
 import { toast } from "react-toastify";
-import { thunkTryCatch } from "common/utils/thunk-try-catch";
+import { createAppAsyncThunk, thunkTryCatch } from "common/utils";
 
 export const setNewPassword = createAppAsyncThunk<
   ForgotPasswordResponseType,

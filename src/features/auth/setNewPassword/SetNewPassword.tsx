@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "app/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./SetNewPassword.module.css";
@@ -13,6 +12,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import formStyle from "../../../common/style/form.module.css";
 import { ArgSetNewPasswordType } from "features/auth/auth.api";
 import { authThunks } from "features/auth/auth.slice";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 const SetNewPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
