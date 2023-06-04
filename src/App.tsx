@@ -16,7 +16,7 @@ import { ForgotPassword } from "features/auth/forgotPassword/ForgotPassword";
 import SetNewPassword from "features/auth/setNewPassword/SetNewPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { GlobalError } from "common/GlobalError/GlobalError";
+import { GlobalError } from "common/globalError/GlobalError";
 
 const router = createBrowserRouter([
   {

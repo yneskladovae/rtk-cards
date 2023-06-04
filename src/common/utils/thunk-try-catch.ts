@@ -9,6 +9,7 @@ export const thunkTryCatch = async (
   promise: Function
 ) => {
   const { dispatch, rejectWithValue } = thunkAPI;
+  dispatch(appActions.setIsLoading({ isLoading: true }));
   try {
     return await promise();
   } catch (e) {
@@ -22,5 +23,7 @@ export const thunkTryCatch = async (
     }
     toast.error(errorMessage);
     return rejectWithValue(null);
+  } finally {
+    dispatch(appActions.setIsLoading({ isLoading: false }));
   }
 };
