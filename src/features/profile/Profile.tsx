@@ -6,10 +6,12 @@ import avatar from "../../assets/img/avatar.jpg";
 import changePhoto from "../../assets/svg/changePhoto.svg";
 import pencil from "../../assets/svg/pencil.svg";
 import logout from "../../assets/svg/logout.svg";
+import arrow from "../../assets/svg/arrowIcon.svg";
 import { authThunks } from "features/auth/auth.slice";
 import globalRouter from "globalRouter";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { NavLink } from "react-router-dom";
 
 export const Profile = () => {
   const profile = useAppSelector((state) => state.auth.profile);
@@ -40,47 +42,55 @@ export const Profile = () => {
   };
 
   return (
-    <div className={formStyle.formBlock}>
-      <div className={formStyle.formContainer}>
-        <h2>Personal Information</h2>
-        <div className={s.userPhotoBlock}>
-          <img className={s.avatar} src={avatar} alt="Avatar image" />
-          <span className={s.changePhoto}>
-            <img src={changePhoto} alt="Change photo icon" />
-          </span>
-        </div>
-        {toggle ? (
-          <div className={s.userNameBlockChanging}>
-            <TextField
-              id="change-nickname"
-              label="Nickname"
-              variant="standard"
-              className={formStyle.email}
-              value={newName}
-              onChange={getNewNameHandler}
-            />
-            <div className={s.saveButton}>
-              <button onClick={setNewNameHandler}>SAVE</button>
-            </div>
+    <div>
+      <div className={s.backPacksList}>
+        <NavLink to={"/packs"}>
+          <img src={arrow} alt="Arrow icon" />
+          Back to Packs List
+        </NavLink>
+      </div>
+      <div className={formStyle.formBlock}>
+        <div className={formStyle.formContainer}>
+          <h2>Personal Information</h2>
+          <div className={s.userPhotoBlock}>
+            <img className={s.avatar} src={avatar} alt="Avatar image" />
+            <span className={s.changePhoto}>
+              <img src={changePhoto} alt="Change photo icon" />
+            </span>
           </div>
-        ) : (
-          <div className={s.userNameBlock}>
-            <div className={s.userName}>{profile?.name}</div>
-            <div className={s.editPencil}>
-              <img onClick={editModeHandler} src={pencil} alt="Pencil" />
+          {toggle ? (
+            <div className={s.userNameBlockChanging}>
+              <TextField
+                id="change-nickname"
+                label="Nickname"
+                variant="standard"
+                className={formStyle.email}
+                value={newName}
+                onChange={getNewNameHandler}
+              />
+              <div className={s.saveButton}>
+                <button onClick={setNewNameHandler}>SAVE</button>
+              </div>
             </div>
+          ) : (
+            <div className={s.userNameBlock}>
+              <div className={s.userName}>{profile?.name}</div>
+              <div className={s.editPencil}>
+                <img onClick={editModeHandler} src={pencil} alt="Pencil" />
+              </div>
+            </div>
+          )}
+          <div className={s.userEmailBlock}>
+            <div className={s.userEmail}>{profile?.email}</div>
           </div>
-        )}
-        <div className={s.userEmailBlock}>
-          <div className={s.userEmail}>{profile?.email}</div>
+          <div className={s.buttonBlock}>
+            <button onClick={logoutHandler} className={s.button}>
+              <img className={s.logout} src={logout} alt="Logout" />
+              Log out
+            </button>
+          </div>
+          <div></div>
         </div>
-        <div className={s.buttonBlock}>
-          <button onClick={logoutHandler} className={s.button}>
-            <img className={s.logout} src={logout} alt="Logout" />
-            Log out
-          </button>
-        </div>
-        <div></div>
       </div>
     </div>
   );

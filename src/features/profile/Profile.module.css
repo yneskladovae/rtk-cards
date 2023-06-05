@@ -14,7 +14,23 @@
     cursor: pointer;
 }
 
-.userNameBlockChanging{
+.backPacksList{
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 15px 0 0 15px;
+}
+
+.backPacksList a {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.userNameBlockChanging {
     position: relative;
     display: flex;
     align-items: center;
