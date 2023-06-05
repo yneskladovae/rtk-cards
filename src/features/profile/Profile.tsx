@@ -18,7 +18,6 @@ export const Profile = () => {
   const dispatch = useAppDispatch();
   const [toggle, setToggle] = useState<boolean>(false);
   const [newName, setNewName] = useState<string | undefined>(profile?.name);
-  console.log(toggle);
 
   const editModeHandler = () => {
     setToggle(!toggle);

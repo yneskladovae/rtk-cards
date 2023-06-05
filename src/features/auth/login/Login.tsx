@@ -47,7 +47,7 @@ const Login = () => {
     dispatch(authThunks.login(payload))
       .unwrap()
       .then(() => {
-        globalRouter.navigate && globalRouter.navigate("/profile");
+        globalRouter.navigate && globalRouter.navigate("/packs");
       })
       .catch((error) => {
         // toast.error(e);
