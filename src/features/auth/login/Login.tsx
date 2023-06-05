@@ -17,6 +17,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { authThunks } from "features/auth/auth.slice";
 import globalRouter from "globalRouter";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -48,8 +49,9 @@ const Login = () => {
       .then(() => {
         globalRouter.navigate && globalRouter.navigate("/profile");
       })
-      .catch((e) => {
-        return e;
+      .catch((error) => {
+        // toast.error(e);
+        toast.error(error.e.response.data.error);
       });
   };
   const onSubmit: SubmitHandler<ArgLoginType> = (data) => loginHandler(data);

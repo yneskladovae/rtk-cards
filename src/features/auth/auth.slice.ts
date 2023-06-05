@@ -43,10 +43,14 @@ export const forgotPassword = createAppAsyncThunk<
 export const register = createAppAsyncThunk<void, ArgRegisterType>(
   "auth/register",
   async (arg: ArgRegisterType, thunkAPI) => {
-    return thunkTryCatch(thunkAPI, async () => {
-      const res = await authApi.register(arg);
-      return res.data;
-    });
+    return thunkTryCatch(
+      thunkAPI,
+      async () => {
+        const res = await authApi.register(arg);
+        return res.data;
+      },
+      false
+    );
   }
 );
 
@@ -54,10 +58,14 @@ export const login = createAppAsyncThunk<
   { profile: ProfileType },
   ArgLoginType
 >("auth/login", async (arg: ArgLoginType, thunkAPI) => {
-  return thunkTryCatch(thunkAPI, async () => {
-    const res = await authApi.login(arg);
-    return { profile: res.data };
-  });
+  return thunkTryCatch(
+    thunkAPI,
+    async () => {
+      const res = await authApi.login(arg);
+      return { profile: res.data };
+    },
+    false
+  );
 });
 
 export const authMe = createAppAsyncThunk<{ profile: ProfileType }, void>(

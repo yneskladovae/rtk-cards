@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import s from "./register.module.css";
 import formStyle from "../../../common/style/form.module.css";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { toast } from "react-toastify";
 
 type Inputs = {
   email: string;
@@ -43,8 +44,9 @@ export const Register = () => {
       .then(() => {
         return navigate("/login");
       })
-      .catch((e) => {
-        return e;
+      .catch((error) => {
+        // return e;
+        toast.error(error.e.response.data.error);
       });
   };
   const onSubmit: SubmitHandler<Inputs> = (data) => {

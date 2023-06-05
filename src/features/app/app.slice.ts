@@ -32,6 +32,8 @@ const slice = createSlice({
       .addMatcher(
         (action) => action.type.endsWith("/rejected"),
         (state, action) => {
+          state.isLoading = false;
+          if (!action.payload.showGlobalError) return;
           const e = action.payload as Error | AxiosError<{ error: string }>;
           let errorMessage = "";
           if (isAxiosError(e)) {

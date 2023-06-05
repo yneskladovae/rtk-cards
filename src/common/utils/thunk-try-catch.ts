@@ -6,14 +6,15 @@ import { appActions } from "features/app/app.slice";
 
 export const thunkTryCatch = async (
   thunkAPI: BaseThunkAPI<RootState, any, AppDispatch, unknown>,
-  promise: Function
+  promise: Function,
+  showGlobalError: boolean = true
 ) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   dispatch(appActions.setIsLoading({ isLoading: true }));
   try {
     return await promise();
   } catch (e) {
-    return rejectWithValue(e);
+    return rejectWithValue({ e, showGlobalError });
     //   let errorMessage = "";
     //   if (isAxiosError(e)) {
     //     errorMessage = e?.response?.data?.error;
