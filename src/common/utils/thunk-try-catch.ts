@@ -13,17 +13,18 @@ export const thunkTryCatch = async (
   try {
     return await promise();
   } catch (e) {
-    let errorMessage = "";
-    if (isAxiosError(e)) {
-      errorMessage = e?.response?.data()?.error;
-    } else if (e instanceof Error) {
-      errorMessage = `Native error ${e.message}`;
-    } else {
-      errorMessage = JSON.stringify(e);
-    }
-    toast.error(errorMessage);
-    return rejectWithValue(null);
-  } finally {
-    dispatch(appActions.setIsLoading({ isLoading: false }));
+    return rejectWithValue(e);
+    //   let errorMessage = "";
+    //   if (isAxiosError(e)) {
+    //     errorMessage = e?.response?.data?.error;
+    //   } else if (e instanceof Error) {
+    //     errorMessage = `Native error ${e.message}`;
+    //   } else {
+    //     errorMessage = JSON.stringify(e);
+    //   }
+    //   toast.error(errorMessage);
+    //   return rejectWithValue(null);
+    // } finally {
+    //   dispatch(appActions.setIsLoading({ isLoading: false }));
   }
 };
