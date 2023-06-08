@@ -1,13 +1,16 @@
 import { instance } from "common/api/common.api";
 
 export const cardsAPI = {
-  getCards(cardsId: string | undefined) {
+  getCards(cardId: string | undefined) {
     return instance.get<GetCardsResponseType>(
-      `cards/card?cardsPack_id=${cardsId}`
+      `cards/card?cardsPack_id=${cardId}`
     );
   },
   addNewCard(arg: ArgAddNewCardType) {
     return instance.post<CardsType>(`cards/card`, { card: arg });
+  },
+  deleteCard(cardId: string | undefined) {
+    return instance.delete<CardsType>(`cards/card?id=${cardId}`);
   },
 };
 

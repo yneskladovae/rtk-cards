@@ -38,6 +38,10 @@ export const Cards = () => {
     dispatch(cardsThunks.addNewCard(card));
   };
 
+  const deleteCardHandler = (cardId: string) => {
+    dispatch(cardsThunks.deleteCard(cardId));
+  };
+
   return (
     <div className={s.cardsBlock}>
       <BackToPackListLink />
@@ -122,7 +126,7 @@ export const Cards = () => {
                               alt="Edit icon"
                             />
                             <img
-                              // onClick={() => deletePackHandler(row._id)}
+                              onClick={() => deleteCardHandler(row._id)}
                               src={trash}
                               alt="Trash icon"
                             />

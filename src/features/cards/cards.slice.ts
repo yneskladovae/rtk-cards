@@ -48,6 +48,17 @@ const addNewCard = createAppAsyncThunk<void, ArgAddNewCardType>(
   }
 );
 
+const deleteCard = createAppAsyncThunk<any, any>(
+  "cards/deleteCard",
+  async (arg, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    return thunkTryCatch(thunkAPI, async () => {
+      await cardsAPI.deleteCard(arg);
+      dispatch(cardsThunks.getCards(arg.cardsPack_id));
+    });
+  }
+);
+
 export const slice = createSlice({
   name: "cards",
   initialState: {
@@ -82,4 +93,5 @@ export const cardsActions = slice.actions;
 export const cardsThunks = {
   getCards,
   addNewCard,
+  deleteCard,
 };
