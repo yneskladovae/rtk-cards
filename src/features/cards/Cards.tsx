@@ -16,6 +16,7 @@ import learn from "assets/svg/learn.svg";
 import edit from "assets/svg/edit.svg";
 import trash from "assets/svg/trash.svg";
 import Rating from "@mui/material/Rating";
+import { formatDate } from "common/utils";
 
 export const Cards = () => {
   const [value, setValue] = React.useState<number | null>(2);
@@ -66,7 +67,9 @@ export const Cards = () => {
                         <Link to={`/cards/${row._id}`}>{row.question}</Link>
                       </TableCell>
                       <TableCell align="center">{row.answer}</TableCell>
-                      <TableCell align="center">{row.updated}</TableCell>
+                      <TableCell align="center">
+                        {formatDate(row.updated)}
+                      </TableCell>
                       <TableCell align="center">
                         <Rating
                           name="simple-controlled"

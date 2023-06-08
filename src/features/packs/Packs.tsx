@@ -20,6 +20,7 @@ import edit from "../../assets/svg/edit.svg";
 import TextField from "@mui/material/TextField";
 import { Link, useNavigate } from "react-router-dom";
 import { cardsThunks } from "features/cards/cards.slice";
+import { formatDate } from "common/utils";
 
 function valuetext(value: number) {
   return `${value}°C`;
@@ -55,14 +56,6 @@ export const Packs = () => {
       },
     };
     dispatch(packsThunks.updatePackName(payload));
-  };
-
-  const formatDate = (data: string) => {
-    const date = new Date(data);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString();
-    return `${day}.${month}.${year}`;
   };
 
   return (
