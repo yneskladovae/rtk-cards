@@ -12,16 +12,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-import learn from "assets/svg/learn.svg";
 import edit from "assets/svg/edit.svg";
 import trash from "assets/svg/trash.svg";
 import Rating from "@mui/material/Rating";
 import { formatDate } from "common/utils";
 
 export const Cards = () => {
+  const userId = useAppSelector((state) => state.auth.profile?._id);
   const [value, setValue] = React.useState<number | null>(2);
   const dispatch = useAppDispatch();
   const cards = useAppSelector((state) => state.cards);
+  const cardsUserId = useAppSelector((state) => state.cards.packUserId);
   const { id } = useParams();
 
   useEffect(() => {
@@ -62,12 +63,21 @@ export const Cards = () => {
           <div>
             <div className={s.titleAndButton}>
               <h1 className={s.maimHeader}>{cards.packName}</h1>
-              <button
-                onClick={addNewCardHandler}
-                className={s.emptyCardsButton}
-              >
-                Add new card
-              </button>
+              {userId === cardsUserId ? (
+                <button
+                  onClick={addNewCardHandler}
+                  className={s.emptyCardsButton}
+                >
+                  Add new card
+                </button>
+              ) : (
+                <button
+                  onClick={addNewCardHandler}
+                  className={s.emptyCardsButton}
+                >
+                  Learn to pack
+                </button>
+              )}
             </div>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -96,7 +106,7 @@ export const Cards = () => {
                       <TableCell align="center">
                         {formatDate(row.updated)}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell className={s.gradeBlock} align="center">
                         <Rating
                           name="simple-controlled"
                           value={5}
@@ -104,6 +114,20 @@ export const Cards = () => {
                             setValue(newValue);
                           }}
                         />
+                        {userId === row.user_id && (
+                          <div className={s.iconsBlock}>
+                            <img
+                              // onClick={() => updatePackNameHandler(row._id)}
+                              src={edit}
+                              alt="Edit icon"
+                            />
+                            <img
+                              // onClick={() => deletePackHandler(row._id)}
+                              src={trash}
+                              alt="Trash icon"
+                            />
+                          </div>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
