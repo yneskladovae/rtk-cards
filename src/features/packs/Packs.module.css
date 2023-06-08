@@ -10,7 +10,7 @@
     justify-content: space-between;
 }
 
-.packsNameLink {
+.packsNameLink a {
     font-style: normal;
     font-weight: 400;
     font-size: 13px;

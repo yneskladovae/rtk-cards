@@ -12,6 +12,28 @@ export const cardsAPI = {
   deleteCard(cardId: string | undefined) {
     return instance.delete<CardsType>(`cards/card?id=${cardId}`);
   },
+  updateCard(arg: ArgUpdateCardType) {
+    return instance.put<CardsType>(`cards/card`, { card: arg });
+  },
+  updateGradeCard(arg: ArgUpdateGradeCardType) {
+    return instance.put<CardsType>(`cards/card`, { arg });
+  },
+};
+
+// export type ArgDeleteCardType = {
+//   cardId: string | undefined;
+//   cardsPack_id: string;
+// };
+
+export type ArgUpdateGradeCardType = {
+  grade: number;
+  card_id: string;
+};
+
+export type ArgUpdateCardType = {
+  _id: string | undefined;
+  question: string;
+  cardsPack_id: string;
 };
 
 export type ArgAddNewCardType = {

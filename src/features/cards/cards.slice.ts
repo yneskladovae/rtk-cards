@@ -54,7 +54,28 @@ const deleteCard = createAppAsyncThunk<any, any>(
     const { dispatch } = thunkAPI;
     return thunkTryCatch(thunkAPI, async () => {
       await cardsAPI.deleteCard(arg);
+      // dispatch(cardsThunks.getCards(arg.cardsPack_id));
+    });
+  }
+);
+
+const updateCard = createAppAsyncThunk<any, any>(
+  "cards/updateCard",
+  async (arg, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    return thunkTryCatch(thunkAPI, async () => {
+      await cardsAPI.updateCard(arg);
       dispatch(cardsThunks.getCards(arg.cardsPack_id));
+    });
+  }
+);
+
+const updateGradeCard = createAppAsyncThunk<any, any>(
+  "cards/updateGradeCard",
+  async (arg, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    return thunkTryCatch(thunkAPI, async () => {
+      await cardsAPI.updateGradeCard(arg);
     });
   }
 );
@@ -94,4 +115,6 @@ export const cardsThunks = {
   getCards,
   addNewCard,
   deleteCard,
+  updateCard,
+  updateGradeCard,
 };

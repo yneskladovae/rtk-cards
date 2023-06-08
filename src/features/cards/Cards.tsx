@@ -19,7 +19,7 @@ import { formatDate } from "common/utils";
 
 export const Cards = () => {
   const userId = useAppSelector((state) => state.auth.profile?._id);
-  const [value, setValue] = React.useState<number | null>(2);
+  const [value, setValue] = React.useState<number | null>(0);
   const dispatch = useAppDispatch();
   const cards = useAppSelector((state) => state.cards);
   const cardsUserId = useAppSelector((state) => state.cards.packUserId);
@@ -40,6 +40,23 @@ export const Cards = () => {
 
   const deleteCardHandler = (cardId: string) => {
     dispatch(cardsThunks.deleteCard(cardId));
+  };
+
+  const updateCardHandler = (cardId: string, cardsPackId: string) => {
+    const payload = {
+      _id: cardId,
+      question: "Napoli?",
+      cardsPack_id: cardsPackId,
+    };
+    dispatch(cardsThunks.updateCard(payload));
+  };
+
+  const updateGradeCardHandler = (cardId: string) => {
+    const payload = {
+      cardId,
+      grade: value,
+    };
+    dispatch(cardsThunks.updateGradeCard(payload));
   };
 
   return (
@@ -112,8 +129,9 @@ export const Cards = () => {
                       </TableCell>
                       <TableCell className={s.gradeBlock} align="center">
                         <Rating
+                          onClick={() => updateGradeCardHandler(row._id)}
                           name="simple-controlled"
-                          value={5}
+                          value={value}
                           onChange={(event, newValue) => {
                             setValue(newValue);
                           }}
@@ -121,7 +139,9 @@ export const Cards = () => {
                         {userId === row.user_id && (
                           <div className={s.iconsBlock}>
                             <img
-                              // onClick={() => updatePackNameHandler(row._id)}
+                              onClick={() =>
+                                updateCardHandler(row._id, row.cardsPack_id)
+                              }
                               src={edit}
                               alt="Edit icon"
                             />
