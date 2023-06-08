@@ -12,6 +12,7 @@ import globalRouter from "globalRouter";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { NavLink } from "react-router-dom";
+import { BackToPackListLink } from "components/backToPackListLink/BackToPackListLink";
 
 export const Profile = () => {
   const profile = useAppSelector((state) => state.auth.profile);
@@ -42,12 +43,13 @@ export const Profile = () => {
 
   return (
     <div>
-      <div className={s.backPacksList}>
-        <NavLink to={"/packs"}>
-          <img src={arrow} alt="Arrow icon" />
-          Back to Packs List
-        </NavLink>
-      </div>
+      {/*<div className={s.backPacksList}>*/}
+      {/*  <NavLink to={"/packs"}>*/}
+      {/*    <img src={arrow} alt="Arrow icon" />*/}
+      {/*    Back to Packs List*/}
+      {/*  </NavLink>*/}
+      {/*</div>*/}
+      <BackToPackListLink />
       <div className={formStyle.formBlock}>
         <div className={formStyle.formContainer}>
           <h2>Personal Information</h2>

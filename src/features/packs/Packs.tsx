@@ -18,22 +18,19 @@ import learn from "../../assets/svg/learn.svg";
 import trash from "../../assets/svg/trash.svg";
 import edit from "../../assets/svg/edit.svg";
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { cardsThunks } from "features/cards/cards.slice";
 
 function valuetext(value: number) {
   return `${value}°C`;
 }
 
 export const Packs = () => {
-  const navigate = useNavigate();
   const packs = useAppSelector((state) => state.packs.cardPacks);
   const profile = useAppSelector((state) => state.auth.profile);
   const dispatch = useAppDispatch();
   const [value, setValue] = React.useState<number[]>([0, 100]);
 
-  // const myPacksFilterHandler = () => {
-  //   return packs?.filter((el) => el.user_id === profile?._id && el);
-  // };
   console.log(packs);
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
@@ -44,17 +41,10 @@ export const Packs = () => {
 
   const addNewPackHandler = () => {
     dispatch(packsThunks.addNewPack({ cardsPack: { name: "New test pack" } }));
-    // dispatch(packsThunks.getCardPacks());
-  };
-
-  const transferToPack = (packId: any) => {
-    dispatch(packsThunks.getPack(packId));
-    // dispatch(packsThunks.getCardPacks());
   };
 
   const deletePackHandler = (packId: any) => {
     dispatch(packsThunks.deletePack(packId));
-    // dispatch(packsThunks.getCardPacks());
   };
 
   const updatePackNameHandler = (packId: string) => {
@@ -65,7 +55,6 @@ export const Packs = () => {
       },
     };
     dispatch(packsThunks.updatePackName(payload));
-    // dispatch(packsThunks.getCardPacks());
   };
 
   const formatDate = (data: string) => {
@@ -137,8 +126,12 @@ export const Packs = () => {
                 key={row._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
-                  {row.name}
+                <TableCell
+                  className={s.packsNameLink}
+                  component="th"
+                  scope="row"
+                >
+                  <Link to={`/cards/${row._id}`}>{row.name}</Link>
                 </TableCell>
                 <TableCell align="center">{row.cardsCount}</TableCell>
                 <TableCell align="center">{formatDate(row.updated)}</TableCell>

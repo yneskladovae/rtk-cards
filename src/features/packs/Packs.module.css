@@ -1,12 +1,22 @@
 .packsBlock {
     max-width: 1280px;
     margin: 0 auto;
+    padding: 0 5px;
 }
 
 .packsHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.packsNameLink {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+    text-decoration: none;
 }
 
 .packsHeader button {
