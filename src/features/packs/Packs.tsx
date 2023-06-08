@@ -14,23 +14,59 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import SearchIcon from "@mui/icons-material/Search";
 import reset from "../../assets/svg/reset.svg";
+import learn from "../../assets/svg/learn.svg";
+import trash from "../../assets/svg/trash.svg";
+import edit from "../../assets/svg/edit.svg";
 import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom";
 
 function valuetext(value: number) {
   return `${value}°C`;
 }
 
 export const Packs = () => {
-  const packs = useAppSelector((state) => state.packs.cardsPack);
+  const navigate = useNavigate();
+  const packs = useAppSelector((state) => state.packs.cardPacks);
+  const profile = useAppSelector((state) => state.auth.profile);
   const dispatch = useAppDispatch();
   const [value, setValue] = React.useState<number[]>([0, 100]);
 
+  // const myPacksFilterHandler = () => {
+  //   return packs?.filter((el) => el.user_id === profile?._id && el);
+  // };
+  console.log(packs);
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
   };
   useEffect(() => {
     dispatch(packsThunks.getCardPacks());
   }, [dispatch]);
+
+  const addNewPackHandler = () => {
+    dispatch(packsThunks.addNewPack({ cardsPack: { name: "New test pack" } }));
+    // dispatch(packsThunks.getCardPacks());
+  };
+
+  const transferToPack = (packId: any) => {
+    dispatch(packsThunks.getPack(packId));
+    // dispatch(packsThunks.getCardPacks());
+  };
+
+  const deletePackHandler = (packId: any) => {
+    dispatch(packsThunks.deletePack(packId));
+    // dispatch(packsThunks.getCardPacks());
+  };
+
+  const updatePackNameHandler = (packId: string) => {
+    const payload = {
+      cardsPack: {
+        _id: packId,
+        name: "Update test pack",
+      },
+    };
+    dispatch(packsThunks.updatePackName(payload));
+    // dispatch(packsThunks.getCardPacks());
+  };
 
   const formatDate = (data: string) => {
     const date = new Date(data);
@@ -44,7 +80,7 @@ export const Packs = () => {
     <div className={s.packsBlock}>
       <div className={s.packsHeader}>
         <h2>Packs list</h2>
-        <button>Add new pack</button>
+        <button onClick={addNewPackHandler}>Add new pack</button>
       </div>
       <div className={s.filtersPacksBlock}>
         <div className={s.search}>
@@ -108,7 +144,21 @@ export const Packs = () => {
                 <TableCell align="center">{formatDate(row.updated)}</TableCell>
                 <TableCell align="center">{formatDate(row.created)}</TableCell>
                 <TableCell align="center">
-                  <button>&#8469;</button>
+                  <img src={learn} alt="Learn icon" />
+                  {profile?._id === row.user_id && (
+                    <>
+                      <img
+                        onClick={() => updatePackNameHandler(row._id)}
+                        src={edit}
+                        alt="Edit icon"
+                      />
+                      <img
+                        onClick={() => deletePackHandler(row._id)}
+                        src={trash}
+                        alt="Trash icon"
+                      />
+                    </>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
