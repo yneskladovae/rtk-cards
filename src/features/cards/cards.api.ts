@@ -6,6 +6,15 @@ export const cardsAPI = {
       `cards/card?cardsPack_id=${cardsId}`
     );
   },
+  addNewCard(arg: ArgAddNewCardType) {
+    return instance.post<CardsType>(`cards/card`, { card: arg });
+  },
+};
+
+export type ArgAddNewCardType = {
+  cardsPack_id: string | undefined;
+  question: string;
+  answer: string;
 };
 
 export type CardsType = {

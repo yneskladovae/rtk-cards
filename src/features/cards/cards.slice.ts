@@ -9,10 +9,12 @@ import {
   packsApi,
 } from "features/packs/packs.api";
 import {
+  ArgAddNewCardType,
   cardsAPI,
   CardsType,
   GetCardsResponseType,
 } from "features/cards/cards.api";
+import { packsThunks } from "features/packs/packs.slice";
 
 const getCards = createAppAsyncThunk<GetCardsResponseType, string | undefined>(
   "cards/getCards",
@@ -31,6 +33,17 @@ const getCards = createAppAsyncThunk<GetCardsResponseType, string | undefined>(
         packUpdated: res.data.packUpdated,
         packName: res.data.packName,
       };
+    });
+  }
+);
+
+const addNewCard = createAppAsyncThunk<void, ArgAddNewCardType>(
+  "cards/addNewCard",
+  async (arg, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    return thunkTryCatch(thunkAPI, async () => {
+      await cardsAPI.addNewCard(arg);
+      dispatch(cardsThunks.getCards(arg.cardsPack_id));
     });
   }
 );
@@ -68,4 +81,5 @@ export const cardsReducer = slice.reducer;
 export const cardsActions = slice.actions;
 export const cardsThunks = {
   getCards,
+  addNewCard,
 };

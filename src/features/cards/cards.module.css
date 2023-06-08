@@ -3,7 +3,10 @@
     margin: 0 auto;
     padding: 0 5px;
 }
-
+.titleAndButton{
+    display: flex;
+    justify-content: space-between;
+}
 .maimHeader {
     font-weight: 600;
     font-size: 22px;

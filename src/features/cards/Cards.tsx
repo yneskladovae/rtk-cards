@@ -23,26 +23,52 @@ export const Cards = () => {
   const dispatch = useAppDispatch();
   const cards = useAppSelector((state) => state.cards);
   const { id } = useParams();
+
   useEffect(() => {
     dispatch(cardsThunks.getCards(id));
   }, [dispatch]);
 
+  const addNewCardHandler = () => {
+    const card = {
+      cardsPack_id: id,
+      question: "Siiiiiiiiiiiiiiiiiiiiiiiu",
+      answer: "Yes",
+    };
+    dispatch(cardsThunks.addNewCard(card));
+  };
+
   return (
     <div className={s.cardsBlock}>
       <BackToPackListLink />
-      <div>
-        <h1 className={s.maimHeader}>{cards.packName}</h1>
-      </div>
       <div className={s.cardsData}>
         {cards?.cards?.length === 0 ? (
-          <div className={s.emptyCardsContainer}>
-            <p className={s.emptyCardsText}>
-              This pack is empty. Click add new card to fill this pack
-            </p>
-            <button className={s.emptyCardsButton}>Add new card</button>
+          <div>
+            <div>
+              <h1 className={s.maimHeader}>{cards.packName}</h1>
+            </div>
+            <div className={s.emptyCardsContainer}>
+              <p className={s.emptyCardsText}>
+                This pack is empty. Click add new card to fill this pack
+              </p>
+              <button
+                onClick={addNewCardHandler}
+                className={s.emptyCardsButton}
+              >
+                Add new card
+              </button>
+            </div>
           </div>
         ) : (
           <div>
+            <div className={s.titleAndButton}>
+              <h1 className={s.maimHeader}>{cards.packName}</h1>
+              <button
+                onClick={addNewCardHandler}
+                className={s.emptyCardsButton}
+              >
+                Add new card
+              </button>
+            </div>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead style={{ background: "#EFEFEF" }}>
