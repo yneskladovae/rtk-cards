@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import s from "./Packs.module.css";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { packsThunks } from "features/packs/packs.slice";
+import { packsActions, packsThunks } from "features/packs/packs.slice";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,26 +18,39 @@ import learn from "../../assets/svg/learn.svg";
 import trash from "../../assets/svg/trash.svg";
 import edit from "../../assets/svg/edit.svg";
 import TextField from "@mui/material/TextField";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { cardsThunks } from "features/cards/cards.slice";
 import { formatDate } from "common/utils";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { PaginationItem } from "@mui/material";
 
-function valuetext(value: number) {
-  return `${value}°C`;
-}
-
-export const Packs = () => {
+export const Packs = (props: any) => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
+  const cardPacksTotalCount = useAppSelector(
+    (state) => state.packs.cardPacksTotalCount
+  );
+  const pageCount = useAppSelector((state) => state.packs.pageCount);
+  const page = useAppSelector((state) => state.packs.page);
   const profile = useAppSelector((state) => state.auth.profile);
   const dispatch = useAppDispatch();
   const [value, setValue] = React.useState<number[]>([0, 100]);
+  const [currentPage, setCurrentPage] = useState(page);
+  const location = useLocation();
+  const history = useNavigate();
 
-  console.log(packs);
+  useEffect(() => {
+    const queryParams: any = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page"), 10) || 1;
+    setCurrentPage(currentPage);
+  }, [location.search]);
+
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
   };
+
   useEffect(() => {
-    dispatch(packsThunks.getCardPacks());
+    dispatch(packsThunks.getCardPacks({}));
   }, [dispatch]);
 
   const addNewPackHandler = () => {
@@ -56,6 +69,14 @@ export const Packs = () => {
       },
     };
     dispatch(packsThunks.updatePackName(payload));
+  };
+
+  const pageChangeHandler = (page: number) => {
+    setCurrentPage(page);
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", "" + page);
+    history(`?${queryParams.toString()}`);
+    dispatch(packsThunks.getCardPacks({ page: page }));
   };
 
   return (
@@ -92,7 +113,6 @@ export const Packs = () => {
                 value={value}
                 onChange={handleChange}
                 valueLabelDisplay="auto"
-                getAriaValueText={valuetext}
               />
             </Box>
             <button className={s.minCount}>10</button>
@@ -151,6 +171,21 @@ export const Packs = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack spacing={2}>
+        <Pagination
+          count={cardPacksTotalCount}
+          page={currentPage}
+          onChange={(event, page) => pageChangeHandler(page)}
+          shape="rounded"
+          renderItem={(item) => (
+            <PaginationItem
+              component={NavLink}
+              to={`?page=${item.page}`}
+              {...item}
+            />
+          )}
+        />
+      </Stack>
     </div>
   );
 };

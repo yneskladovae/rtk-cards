@@ -16,7 +16,7 @@ export const cardsAPI = {
     return instance.put<CardsType>(`cards/card`, { card: arg });
   },
   updateGradeCard(arg: ArgUpdateGradeCardType) {
-    return instance.put<CardsType>(`cards/card`, { arg });
+    return instance.put<any>(`cards/grade`, arg);
   },
 };
 

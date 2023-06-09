@@ -3,6 +3,7 @@ import { createAppAsyncThunk, thunkTryCatch } from "common/utils";
 import {
   ArgAddNewPackType,
   ArgDeletePackType,
+  ArgGetParamsType,
   ArgUpdatePackNameType,
   CardPacksType,
   GetCardPacksResponseType,
@@ -15,7 +16,7 @@ const updatePackName = createAppAsyncThunk<void, ArgUpdatePackNameType>(
     const { dispatch } = thunkAPI;
     return thunkTryCatch(thunkAPI, async () => {
       await packsApi.updatePackName(arg);
-      dispatch(packsThunks.getCardPacks());
+      dispatch(packsThunks.getCardPacks({}));
     });
   }
 );
@@ -26,7 +27,7 @@ const deletePack = createAppAsyncThunk<void, ArgDeletePackType>(
     const { dispatch } = thunkAPI;
     return thunkTryCatch(thunkAPI, async () => {
       await packsApi.deletePack(packId);
-      dispatch(packsThunks.getCardPacks());
+      dispatch(packsThunks.getCardPacks({}));
     });
   }
 );
@@ -37,27 +38,27 @@ const addNewPack = createAppAsyncThunk<void, ArgAddNewPackType>(
     const { dispatch } = thunkAPI;
     return thunkTryCatch(thunkAPI, async () => {
       await packsApi.addNewPack(arg);
-      dispatch(packsThunks.getCardPacks());
+      dispatch(packsThunks.getCardPacks({}));
     });
   }
 );
 
-const getCardPacks = createAppAsyncThunk<GetCardPacksResponseType, void>(
-  "packs/getCardPacks",
-  async (arg, thunkAPI) => {
-    return thunkTryCatch(thunkAPI, async () => {
-      const res = await packsApi.getPacks();
-      return {
-        cardPacks: res.data.cardPacks,
-        page: res.data.page,
-        cardPacksTotalCount: res.data.cardPacksTotalCount,
-        maxCardsCount: res.data.maxCardsCount,
-        minCardsCount: res.data.minCardsCount,
-        pageCount: res.data.pageCount,
-      };
-    });
-  }
-);
+const getCardPacks = createAppAsyncThunk<
+  GetCardPacksResponseType,
+  ArgGetParamsType
+>("packs/getCardPacks", async (arg, thunkAPI) => {
+  return thunkTryCatch(thunkAPI, async () => {
+    const res = await packsApi.getPacks(arg);
+    return {
+      cardPacks: res.data.cardPacks,
+      page: res.data.page,
+      cardPacksTotalCount: res.data.cardPacksTotalCount,
+      maxCardsCount: res.data.maxCardsCount,
+      minCardsCount: res.data.minCardsCount,
+      pageCount: res.data.pageCount,
+    };
+  });
+});
 
 export const slice = createSlice({
   name: "packs",
@@ -69,7 +70,11 @@ export const slice = createSlice({
     minCardsCount: 1,
     pageCount: 1,
   },
-  reducers: {},
+  reducers: {
+    setPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.page = action.payload.page;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCardPacks.fulfilled, (state, action) => {
       state.cardPacks = action.payload.cardPacks;

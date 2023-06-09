@@ -53,7 +53,7 @@ export const Cards = () => {
 
   const updateGradeCardHandler = (cardId: string) => {
     const payload = {
-      cardId,
+      card_id: cardId,
       grade: value,
     };
     dispatch(cardsThunks.updateGradeCard(payload));
