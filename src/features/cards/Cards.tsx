@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { SyntheticEvent, useEffect } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { cardsThunks } from "features/cards/cards.slice";
@@ -51,7 +51,8 @@ export const Cards = () => {
     dispatch(cardsThunks.updateCard(payload));
   };
 
-  const updateGradeCardHandler = (cardId: string) => {
+  const updateGradeCardHandler = (value: number | null, cardId: string) => {
+    setValue(value);
     const payload = {
       card_id: cardId,
       grade: value,
@@ -129,12 +130,15 @@ export const Cards = () => {
                       </TableCell>
                       <TableCell className={s.gradeBlock} align="center">
                         <Rating
-                          onClick={() => updateGradeCardHandler(row._id)}
+                          // onClick={() => updateGradeCardHandler(row._id)}
                           name="simple-controlled"
-                          value={value}
-                          onChange={(event, newValue) => {
-                            setValue(newValue);
-                          }}
+                          value={row.grade}
+                          // onChange={(event, newValue) => {
+                          //   setValue(newValue);
+
+                          onChange={(event, value) =>
+                            updateGradeCardHandler(value, row._id)
+                          }
                         />
                         {userId === row.user_id && (
                           <div className={s.iconsBlock}>

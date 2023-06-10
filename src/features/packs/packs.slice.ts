@@ -44,18 +44,13 @@ const addNewPack = createAppAsyncThunk<void, ArgAddNewPackType>(
 );
 
 const getCardPacks = createAppAsyncThunk<
-  GetCardPacksResponseType,
+  { data: GetCardPacksResponseType },
   ArgGetParamsType
 >("packs/getCardPacks", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
     const res = await packsApi.getPacks(arg);
     return {
-      cardPacks: res.data.cardPacks,
-      page: res.data.page,
-      cardPacksTotalCount: res.data.cardPacksTotalCount,
-      maxCardsCount: res.data.maxCardsCount,
-      minCardsCount: res.data.minCardsCount,
-      pageCount: res.data.pageCount,
+      data: res.data,
     };
   });
 });
@@ -77,12 +72,12 @@ export const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCardPacks.fulfilled, (state, action) => {
-      state.cardPacks = action.payload.cardPacks;
-      state.page = action.payload.page;
-      state.cardPacksTotalCount = action.payload.cardPacksTotalCount;
-      state.maxCardsCount = action.payload.maxCardsCount;
-      state.minCardsCount = action.payload.minCardsCount;
-      state.pageCount = action.payload.pageCount;
+      state.cardPacks = action.payload.data.cardPacks;
+      state.page = action.payload.data.page;
+      state.cardPacksTotalCount = action.payload.data.cardPacksTotalCount;
+      state.maxCardsCount = action.payload.data.maxCardsCount;
+      state.minCardsCount = action.payload.data.minCardsCount;
+      state.pageCount = action.payload.data.pageCount;
     });
   },
 });
