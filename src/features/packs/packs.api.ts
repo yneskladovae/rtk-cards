@@ -28,6 +28,7 @@ export type ArgGetParamsType = {
   sortPacks?: string;
   page?: number;
   pageCount?: number;
+  user_id?: string;
 };
 
 export type ArgDeletePackType = {

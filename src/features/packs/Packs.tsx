@@ -18,8 +18,13 @@ import learn from "../../assets/svg/learn.svg";
 import trash from "../../assets/svg/trash.svg";
 import edit from "../../assets/svg/edit.svg";
 import TextField from "@mui/material/TextField";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { cardsThunks } from "features/cards/cards.slice";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { formatDate } from "common/utils";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -36,14 +41,18 @@ export const Packs = (props: any) => {
   const dispatch = useAppDispatch();
   const [value, setValue] = React.useState<number[]>([0, 100]);
   const [currentPage, setCurrentPage] = useState(page);
-  const location = useLocation();
-  const history = useNavigate();
+  const [searchPacksName, setSearchPacksName] = useState<string>("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const packName = searchParams.get("packName");
+  console.log(packName);
+  console.log(Object.fromEntries(searchParams));
 
-  useEffect(() => {
-    const queryParams: any = new URLSearchParams(location.search);
-    const currentPage = parseInt(queryParams.get("page"), 10) || 1;
-    setCurrentPage(currentPage);
-  }, [location.search]);
+  const searchPacksNameHandler = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    dispatch(packsThunks.getCardPacks({ packName: e.currentTarget.value }));
+    setSearchParams({ packName: e.currentTarget.value });
+  };
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
@@ -61,6 +70,11 @@ export const Packs = (props: any) => {
     dispatch(packsThunks.deletePack(packId));
   };
 
+  const myPacksFilter = () => {
+    const userId = "64750d48a41893aa8682979d";
+    dispatch(packsThunks.getCardPacks({ user_id: userId }));
+  };
+
   const updatePackNameHandler = (packId: string) => {
     const payload = {
       cardsPack: {
@@ -73,9 +87,6 @@ export const Packs = (props: any) => {
 
   const pageChangeHandler = (page: number) => {
     setCurrentPage(page);
-    const queryParams = new URLSearchParams(location.search);
-    queryParams.set("page", "" + page);
-    history(`?${queryParams.toString()}`);
     dispatch(packsThunks.getCardPacks({ page: page }));
   };
 
@@ -89,6 +100,7 @@ export const Packs = (props: any) => {
         <div className={s.search}>
           <h3>Search</h3>
           <TextField
+            onChange={searchPacksNameHandler}
             id="outlined-start-adornment"
             className={s.searchForm}
             sx={{ m: 1, width: "100%" }}
@@ -100,7 +112,9 @@ export const Packs = (props: any) => {
         </div>
         <div className={s.showPacks}>
           <h3>Show packs cards</h3>
-          <button className={s.btnMy}>My</button>
+          <button onClick={myPacksFilter} className={s.btnMy}>
+            My
+          </button>
           <button className={`${s.btnAll}  ${s.active}`}>All</button>
         </div>
         <div className={s.numberOfCards}>
@@ -177,13 +191,13 @@ export const Packs = (props: any) => {
           page={currentPage}
           onChange={(event, page) => pageChangeHandler(page)}
           shape="rounded"
-          renderItem={(item) => (
-            <PaginationItem
-              component={NavLink}
-              to={`?page=${item.page}`}
-              {...item}
-            />
-          )}
+          // renderItem={(item) => (
+          // <PaginationItem
+          //   component={NavLink}
+          //   to={`?page=${item.page}`}
+          //   {...item}
+          // />
+          // )}
         />
       </Stack>
     </div>
