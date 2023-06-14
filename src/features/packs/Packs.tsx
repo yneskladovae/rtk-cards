@@ -21,8 +21,18 @@ import { SearchBar } from "features/packs/SearchBar/SearchBar";
 export const Packs = () => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
   const pageCount = useAppSelector((state) => state.packs.pageCount);
+  // const params = useAppSelector((state) => state.packsParams);
   const profile = useAppSelector((state) => state.auth.profile);
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+
+  // useEffect(() => {
+  //   dispatch(setParams(searchParams));
+  // }, []);
+
+  // useEffect(() => {
+  //   dispatch(packsThunks.getCardPacks(params));
+  // }, [dispatch, params]);
 
   useEffect(() => {
     dispatch(packsThunks.getCardPacks({}));
