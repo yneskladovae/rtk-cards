@@ -23,9 +23,6 @@ export const slice = createSlice({
     setUserId: (state, action: PayloadAction<{ user_id: string }>) => {
       state.queryParams.user_id = action.payload.user_id;
     },
-    setIsMyPacksFilter: (state, action: PayloadAction<{ user_id: string }>) => {
-      state.queryParams.user_id = action.payload.user_id;
-    },
     setSearchPacksName: (
       state,
       action: PayloadAction<{ packName: string }>
