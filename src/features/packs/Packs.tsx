@@ -17,26 +17,48 @@ import { Link, useSearchParams } from "react-router-dom";
 import { formatDate } from "common/utils";
 import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
+import { packsParamsActions } from "features/packs/packsParams.slice";
 
 export const Packs = () => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
   const pageCount = useAppSelector((state) => state.packs.pageCount);
-  // const params = useAppSelector((state) => state.packsParams);
+  const params = useAppSelector((state) => state.packsParams);
   const profile = useAppSelector((state) => state.auth.profile);
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  console.log("params", params);
+  console.log(searchParams);
 
   // useEffect(() => {
   //   dispatch(setParams(searchParams));
+  //   dispatch(packsParamsActions.setParams({ queryParams: params.queryParams }));
   // }, []);
 
   // useEffect(() => {
-  //   dispatch(packsThunks.getCardPacks(params));
-  // }, [dispatch, params]);
+  //   dispatch(packsParamsActions.setParams({ queryParams: searchParams }));
+  // }, [dispatch, searchParams]);
 
   useEffect(() => {
-    dispatch(packsThunks.getCardPacks({}));
-  }, [dispatch]);
+    dispatch(packsThunks.getCardPacks(params.queryParams));
+  }, [dispatch, params.queryParams]);
+
+  // useEffect(() => {
+  //   const queryParams = {
+  //     packName: params.queryParams.packName,
+  //     min: String(params.queryParams.min),
+  //     max: String(params.queryParams.max),
+  //     sortPacks: params.queryParams.sortPacks,
+  //     page: String(params.queryParams.page),
+  //     pageCount: String(params.queryParams.pageCount),
+  //     user_id: params.queryParams.user_id,
+  //   };
+  //   const queryParamsString = new URLSearchParams(queryParams).toString();
+  //
+  //   if (searchParams.toString() !== queryParamsString) {
+  //     setSearchParams(queryParams);
+  //     dispatch(packsThunks.getCardPacks(params.queryParams));
+  //   }
+  // }, [dispatch, params, searchParams]);
 
   const addNewPackHandler = () => {
     dispatch(packsThunks.addNewPack({ cardsPack: { name: "New test pack" } }));

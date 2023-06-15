@@ -65,11 +65,7 @@ export const slice = createSlice({
     minCardsCount: 1,
     pageCount: 1,
   },
-  reducers: {
-    setPage: (state, action: PayloadAction<{ page: number }>) => {
-      state.page = action.payload.page;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCardPacks.fulfilled, (state, action) => {
       state.cardPacks = action.payload.data.cardPacks;

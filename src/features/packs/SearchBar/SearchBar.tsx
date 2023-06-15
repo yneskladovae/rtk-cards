@@ -10,43 +10,62 @@ import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useSearchParams } from "react-router-dom";
 import { packsThunks } from "features/packs/packs.slice";
 import { useDebounce } from "common/hooks/useDebounce";
+import { packsParamsActions } from "features/packs/packsParams.slice";
 
 export const SearchBar = () => {
-  const maxCardsCount = useAppSelector((state) => state.packs.maxCardsCount);
-  const minCardsCount = useAppSelector((state) => state.packs.minCardsCount);
   const authUserId = useAppSelector((state) => state.auth?.profile?._id);
-  const dispatch = useAppDispatch();
-  const [rangeValue, setRangeValue] = React.useState<number[]>([
-    minCardsCount,
-    maxCardsCount,
-  ]);
+  const min = useAppSelector((state) => state.packsParams.queryParams.min);
+  const max = useAppSelector((state) => state.packsParams.queryParams.max);
+  const [rangeValues, setRangeValues] = React.useState<number[]>([min, max]);
   const [searchPacksName, setSearchPacksName] = useState<string>("");
   const debounceName = useDebounce<string>(searchPacksName, 500);
+  const debounceRange = useDebounce<number[]>(rangeValues, 500);
   const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(
+      packsParamsActions.setSearchPacksName({ packName: searchPacksName })
+    );
+  }, [debounceName]);
+
+  useEffect(() => {
+    dispatch(packsParamsActions.setRangeValues({ rangeValues: rangeValues }));
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      min: rangeValues[0].toString(),
+      max: rangeValues[1].toString(),
+    });
+  }, [debounceRange]);
 
   const searchPacksNameHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    dispatch(packsThunks.getCardPacks({ packName: e.currentTarget.value }));
+    // dispatch(
+    //   packsParamsActions.setSearchPacksName({ packName: e.currentTarget.value })
+    // );
     setSearchPacksName(e.currentTarget.value);
-    setSearchParams({ packName: e.currentTarget.value });
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      packName: e.currentTarget.value,
+    });
   };
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    setSearchParams({
-      ...Object.fromEntries(searchParams),
-      max: maxCardsCount.toString(),
-      min: minCardsCount.toString(),
-    });
-    setRangeValue(newValue as number[]);
-    dispatch(
-      packsThunks.getCardPacks({ min: minCardsCount, max: maxCardsCount })
-    );
+    // setSearchParams({
+    //   ...Object.fromEntries(searchParams),
+    //   max: maxCardsCount.toString(),
+    //   min: minCardsCount.toString(),
+    // });
+    setRangeValues(newValue as number[]);
+    // dispatch(
+    //   packsThunks.getCardPacks({ min: minCardsCount, max: maxCardsCount })
+    // );
   };
 
   const isMyPacksFilter = (userId?: string) => {
     if (userId) {
-      dispatch(packsThunks.getCardPacks({ user_id: userId }));
+      dispatch(packsParamsActions.setUserId({ user_id: userId }));
       setSearchParams({ ...Object.fromEntries(searchParams), user_id: userId });
     } else {
       dispatch(packsThunks.getCardPacks({}));
@@ -83,16 +102,16 @@ export const SearchBar = () => {
       <div className={s.numberOfCards}>
         <h3>Number of cards</h3>
         <div className={s.numberOfCardsContainer}>
-          <button className={s.minCount}>{rangeValue[0]}</button>
+          <button className={s.minCount}>{rangeValues[0]}</button>
           <Box sx={{ width: 200 }}>
             <Slider
               getAriaLabel={() => "Temperature range"}
-              value={rangeValue}
+              value={rangeValues}
               onChange={handleChange}
               valueLabelDisplay="auto"
             />
           </Box>
-          <button className={s.minCount}>{rangeValue[1]}</button>
+          <button className={s.minCount}>{rangeValues[1]}</button>
         </div>
       </div>
       <div className={s.reset}>

@@ -8,6 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useSearchParams } from "react-router-dom";
+import { packsParamsActions } from "features/packs/packsParams.slice";
 
 export const PaginationBar = () => {
   const cardPacksTotalCount = useAppSelector(
@@ -16,12 +17,15 @@ export const PaginationBar = () => {
   const page = useAppSelector((state) => state.packs.page);
   const [currentPage, setCurrentPage] = useState(page);
   const [searchParams, setSearchParams] = useSearchParams();
-
   const dispatch = useAppDispatch();
 
   const pageChangeHandler = (page: number) => {
     setCurrentPage(page);
-    dispatch(packsThunks.getCardPacks({ page: page }));
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      page: page.toString(),
+    });
+    dispatch(packsParamsActions.setPage({ page: page }));
   };
 
   const pageCountChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -30,9 +34,9 @@ export const PaginationBar = () => {
       ...Object.fromEntries(searchParams),
       pageCount: pageCount.toString(),
     });
-
-    // dispatch(packsThunks.getCardPacks({ pageCount: pageCount }));
+    dispatch(packsParamsActions.setPageCount({ pageCount: pageCount }));
   };
+
   return (
     <Stack spacing={2}>
       <Pagination

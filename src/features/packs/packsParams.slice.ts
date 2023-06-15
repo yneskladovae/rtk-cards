@@ -5,8 +5,8 @@ export const slice = createSlice({
   initialState: {
     queryParams: {
       packName: "",
-      min: 1,
-      max: 100,
+      min: 0,
+      max: 78,
       sortPacks: "",
       page: 1,
       pageCount: 4,
@@ -19,6 +19,9 @@ export const slice = createSlice({
     },
     setPageCount: (state, action: PayloadAction<{ pageCount: number }>) => {
       state.queryParams.pageCount = action.payload.pageCount;
+    },
+    setUserId: (state, action: PayloadAction<{ user_id: string }>) => {
+      state.queryParams.user_id = action.payload.user_id;
     },
     setIsMyPacksFilter: (state, action: PayloadAction<{ user_id: string }>) => {
       state.queryParams.user_id = action.payload.user_id;
@@ -35,6 +38,9 @@ export const slice = createSlice({
     ) => {
       state.queryParams.min = action.payload.rangeValues[0];
       state.queryParams.max = action.payload.rangeValues[1];
+    },
+    setParams: (state, action: PayloadAction<{ queryParams: any }>) => {
+      state.queryParams = action.payload.queryParams;
     },
   },
   extraReducers: {},
