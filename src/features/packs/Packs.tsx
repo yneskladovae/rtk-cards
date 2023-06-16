@@ -36,26 +36,25 @@ export const Packs = () => {
   //   dispatch(setParams(searchParams));
   // }, []);
 
-  useEffect(() => {
-    const packName = searchParams.get("packName");
-    const max = searchParams.get("max");
-    const min = searchParams.get("min");
-    const page = searchParams.get("page");
-    const pageCount = searchParams.get("pageCount");
-    const user_id = searchParams.get("user_id");
+  // useEffect(() => {
+  //   const packName = searchParams.get("packName");
+  //   const max = searchParams.get("max");
+  //   const min = searchParams.get("min");
+  //   const page = searchParams.get("page");
+  //   const pageCount = searchParams.get("pageCount");
+  //   const user_id = searchParams.get("user_id");
+  //
+  //   console.log(searchParams.get("packName"));
+  //   dispatch(
+  //     packsParamsActions.setParams({
+  //       queryParams: { packName, max, min, page, pageCount, user_id },
+  //     })
+  //   );
+  // }, [dispatch, searchParams]);
 
-    console.log(searchParams.get("packName"));
-    dispatch(
-      packsParamsActions.setParams({
-        queryParams: { packName, max, min, page, pageCount, user_id },
-      })
-    );
-  }, [dispatch, searchParams]);
-
   useEffect(() => {
-    if (params.queryParams !== test) {
-      dispatch(packsThunks.getCardPacks(params.queryParams));
-    }
+    dispatch(packsThunks.getCardPacks(params.queryParams));
+    // dispatch(packsThunks.getCardPacks({ ...Object.fromEntries(searchParams) }));
   }, [dispatch, params.queryParams]);
 
   const addNewPackHandler = () => {
