@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -19,28 +19,31 @@ type BasicModalType = {
   children?: ReactNode;
   childrenButton?: ReactNode;
   title?: string;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const BasicModal: FC<BasicModalType> = ({
   children,
+  isOpen,
+  setIsOpen,
   title,
   childrenButton,
 }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const [open, setOpen] = useState(isOpen);
+
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   return (
-    <div>
-      <Button onClick={handleOpen}>{title}</Button>
-      <Modal open={open} onClose={handleClose}>
-        <>
-          <Box sx={style}>
-            {children}
-            <div onClick={handleClose}>{childrenButton}</div>
-          </Box>
-        </>
-      </Modal>
-    </div>
+    <Modal open={isOpen} onClose={() => setIsOpen((state) => !state)}>
+      <Box sx={style}>
+        <div>
+          {children}
+          {/*<div onClick={handleClose}>{childrenButton}</div>*/}
+        </div>
+      </Box>
+    </Modal>
   );
 };

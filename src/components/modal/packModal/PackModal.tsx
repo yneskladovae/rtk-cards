@@ -5,6 +5,8 @@ import { Checkbox, FormControlLabel } from "@mui/material";
 import Button from "@mui/material/Button";
 
 type AddPackModalType = {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
   title: string;
   addNewPackHandler?: (packName: string, isPrivate: boolean) => void;
   editPackHandler?: (packName: string, isPrivate: boolean) => void;
@@ -12,6 +14,8 @@ type AddPackModalType = {
 };
 
 export const PackModal: FC<AddPackModalType> = ({
+  setIsOpen,
+  isOpen,
   title,
   addNewPackHandler,
   editPackHandler,
@@ -33,51 +37,68 @@ export const PackModal: FC<AddPackModalType> = ({
   };
 
   return (
-    <>
-      <BasicModal
-        title={title}
-        childrenButton={
-          <Button
-            onClick={() => {
-              if (title === "Add new pack") {
-                if (addNewPackHandler) {
-                  addNewPackHandler(packName, isPrivate);
-                }
-              } else {
-                if (editPackHandler) {
-                  debugger;
-                  editPackHandler(packName, isPrivate);
-                }
+    <BasicModal
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}
+      // title={title}
+      // childrenButton={
+      //   <Button
+      //     onClick={() => {
+      //       if (title === "Add new pack") {
+      //         if (addNewPackHandler) {
+      //           addNewPackHandler(packName, isPrivate);
+      //         }
+      //       } else {
+      //         if (editPackHandler) {
+      //           debugger;
+      //           editPackHandler(packName, isPrivate);
+      //         }
+      //       }
+      //     }}
+      //     variant="contained"
+      //   >
+      //     Save
+      //   </Button>
+      // }
+    >
+      <div>
+        <h1>{title}</h1>
+        <TextField
+          value={packName}
+          onChange={(e) => packNameChangeHandler(e)}
+          variant={"standard"}
+          label={"Name pack"}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              value={isPrivate}
+              onChange={(e) => isPrivateChangeHandler(e)}
+            />
+          }
+          label="Private pack"
+        />
+        <Button onClick={() => {}} variant={"outlined"}>
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
+            if (title === "Add new pack") {
+              if (addNewPackHandler) {
+                addNewPackHandler(packName, isPrivate);
               }
-            }}
-            variant="contained"
-          >
-            Save
-          </Button>
-        }
-      >
-        <div>
-          <h1>{title}</h1>
-          <TextField
-            value={packName}
-            onChange={(e) => packNameChangeHandler(e)}
-            variant={"standard"}
-            label={"Name pack"}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                value={isPrivate}
-                onChange={(e) => isPrivateChangeHandler(e)}
-              />
+            } else {
+              if (editPackHandler) {
+                debugger;
+                editPackHandler(packName, isPrivate);
+              }
             }
-            label="Private pack"
-          />
-          <Button onClick={() => {}} variant={"outlined"}>
-            Cancel
-          </Button>
-        </div>
-      </BasicModal>
-    </>
+          }}
+          variant="contained"
+        >
+          Save
+        </Button>
+      </div>
+    </BasicModal>
   );
 };

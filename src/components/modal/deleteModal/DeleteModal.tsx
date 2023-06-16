@@ -3,7 +3,7 @@ import { BasicModal } from "components/modal/BasicModal";
 
 export const DeleteModal = () => {
   return (
-    <BasicModal>
+    <BasicModal isOpen={false} setIsOpen={() => {}}>
       <div>
         <h1>Delete modal</h1>
         <button>Save</button>

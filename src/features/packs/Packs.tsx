@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import s from "./Packs.module.css";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { packsActions, packsThunks } from "features/packs/packs.slice";
@@ -13,13 +19,13 @@ import Paper from "@mui/material/Paper";
 import learn from "../../assets/svg/learn.svg";
 import trash from "../../assets/svg/trash.svg";
 import edit from "../../assets/svg/edit.svg";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { formatDate } from "common/utils";
 import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
-import { packsParamsActions } from "features/packs/packsParams.slice";
-import { useDebounce } from "common/hooks/useDebounce";
 import { PackModal } from "components/modal/packModal/PackModal";
+import queryString from "query-string";
+import { packsParamsActions } from "features/packs/packsParams.slice";
 
 export const Packs = () => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
@@ -28,15 +34,12 @@ export const Packs = () => {
   const profile = useAppSelector((state) => state.auth.profile);
   const [searchParams, setSearchParams] = useSearchParams("");
   const dispatch = useAppDispatch();
-  console.log("params", params);
-  console.log(searchParams);
 
-  const test = useDebounce<any>(params.queryParams, 500);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   // useEffect(() => {
   //   dispatch(setParams(searchParams));
   // }, []);
-
   // useEffect(() => {
   //   const packName = searchParams.get("packName");
   //   const max = searchParams.get("max");
@@ -53,6 +56,19 @@ export const Packs = () => {
   //   );
   // }, [dispatch, searchParams]);
 
+  const location = useLocation();
+  useLayoutEffect(() => {
+    console.log(location.search);
+    const queryParamss = queryString.parse(location.search);
+    console.log(queryParamss);
+    // dispatch(
+    //   packsParamsActions.setParams({
+    //     queryParams: queryParamss,
+    //   })
+    // );
+    dispatch(packsThunks.getCardPacks(queryParamss));
+  }, []);
+
   useEffect(() => {
     dispatch(packsThunks.getCardPacks(params.queryParams));
     // dispatch(packsThunks.getCardPacks({ ...Object.fromEntries(searchParams) }));
@@ -63,6 +79,7 @@ export const Packs = () => {
   // };
 
   const addNewPackHandler = (packName: string, isPrivate: boolean) => {
+    setIsModalOpen(false);
     dispatch(packsActions.setPackName({ packName: "" }));
     dispatch(packsActions.setIsPrivate({ isPrivate: false }));
     const payload = {
@@ -99,20 +116,30 @@ export const Packs = () => {
     dispatch(packsThunks.updatePackName(payload));
   };
 
-  // [isModalOpen, setisModalOpen]
+  const addNewPackModalHandler = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div className={s.packsBlock}>
       <div className={s.packsHeader}>
         <h2>Packs list</h2>
-        {/*<button onClick={addNewPackHandler}>Add new pack</button>*/}
-        <PackModal
-          // open
-          // callback = {() => addNewPackHandler; setIsOpen(false)}
-          // onClose
-          title={"Add new pack"}
-          addNewPackHandler={addNewPackHandler}
-        />
+        <button onClick={addNewPackModalHandler}>Add new pack</button>
+        {isModalOpen && (
+          <PackModal
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            title={"Add new pack"}
+            addNewPackHandler={addNewPackHandler}
+          />
+        )}
+        {/*<PackModal*/}
+        {/*  // open*/}
+        {/*  // callback = {() => addNewPackHandler; setIsOpen(false)}*/}
+        {/*  // onClose*/}
+        {/*  title={"Add new pack"}*/}
+        {/*  addNewPackHandler={addNewPackHandler}*/}
+        {/*/>*/}
       </div>
       <SearchBar />
       <TableContainer component={Paper}>
@@ -143,15 +170,16 @@ export const Packs = () => {
                   <img src={learn} alt="Learn icon" />
                   {profile?._id === row.user_id && (
                     <>
-                      <PackModal
-                        //editPackHandler={() => editPackHandler(row._id)}
-                        editPackHandler={(
-                          packName: string,
-                          isPrivate: boolean
-                        ) => editPackHandler(row._id, packName, isPrivate)}
-                        title={"Edit pack"}
-                        oldPackName={row.name}
-                      />
+                      {/*<PackModal*/}
+                      {/*  isOpen={false}*/}
+                      {/*  //editPackHandler={() => editPackHandler(row._id)}*/}
+                      {/*  editPackHandler={(*/}
+                      {/*    packName: string,*/}
+                      {/*    isPrivate: boolean*/}
+                      {/*  ) => editPackHandler(row._id, packName, isPrivate)}*/}
+                      {/*  title={"Edit pack"}*/}
+                      {/*  oldPackName={row.name}*/}
+                      {/*/>*/}
                       {/*<img*/}
                       {/*  onClick={editPackHandler}*/}
                       {/*  src={edit}*/}
