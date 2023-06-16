@@ -16,19 +16,30 @@ const style = {
 };
 
 type BasicModalType = {
-  children: ReactNode;
+  children?: ReactNode;
+  childrenButton?: ReactNode;
+  title?: string;
 };
 
-export const BasicModal: FC<BasicModalType> = ({ children }) => {
+export const BasicModal: FC<BasicModalType> = ({
+  children,
+  title,
+  childrenButton,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button onClick={handleOpen}>{title}</Button>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>{children}</Box>
+        <>
+          <Box sx={style}>
+            {children}
+            <div onClick={handleClose}>{childrenButton}</div>
+          </Box>
+        </>
       </Modal>
     </div>
   );

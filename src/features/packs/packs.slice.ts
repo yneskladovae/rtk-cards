@@ -64,8 +64,17 @@ export const slice = createSlice({
     maxCardsCount: 1,
     minCardsCount: 1,
     pageCount: 1,
+    packName: "",
+    isPrivate: false,
   },
-  reducers: {},
+  reducers: {
+    setPackName: (state, action: PayloadAction<{ packName: string }>) => {
+      state.packName = action.payload.packName;
+    },
+    setIsPrivate: (state, action: PayloadAction<{ isPrivate: boolean }>) => {
+      state.isPrivate = action.payload.isPrivate;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCardPacks.fulfilled, (state, action) => {
       state.cardPacks = action.payload.data.cardPacks;

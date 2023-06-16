@@ -47,7 +47,7 @@ export type ArgAddNewPackType = {
   cardsPack: {
     name?: string;
     deckCover?: string;
-    private?: false;
+    private?: boolean;
   };
 };
 

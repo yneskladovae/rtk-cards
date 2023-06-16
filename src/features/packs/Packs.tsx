@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import s from "./Packs.module.css";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { packsThunks } from "features/packs/packs.slice";
+import { packsActions, packsThunks } from "features/packs/packs.slice";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -19,6 +19,7 @@ import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
 import { packsParamsActions } from "features/packs/packsParams.slice";
 import { useDebounce } from "common/hooks/useDebounce";
+import { AddPackModal } from "components/modal/packModal/AddPackModal";
 
 export const Packs = () => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
@@ -57,8 +58,17 @@ export const Packs = () => {
     // dispatch(packsThunks.getCardPacks({ ...Object.fromEntries(searchParams) }));
   }, [dispatch, params.queryParams]);
 
-  const addNewPackHandler = () => {
-    dispatch(packsThunks.addNewPack({ cardsPack: { name: "New test pack" } }));
+  // const addNewPackHandler = () => {
+  //   dispatch(packsThunks.addNewPack({ cardsPack: { name: "New test pack" } }));
+  // };
+
+  const addNewPackHandler = (packName: string, isPrivate: boolean) => {
+    dispatch(packsActions.setPackName({ packName: "" }));
+    dispatch(packsActions.setIsPrivate({ isPrivate: false }));
+    const payload = {
+      cardsPack: { name: packName, private: isPrivate },
+    };
+    dispatch(packsThunks.addNewPack(payload));
   };
 
   const deletePackHandler = (packId: any) => {
@@ -79,7 +89,11 @@ export const Packs = () => {
     <div className={s.packsBlock}>
       <div className={s.packsHeader}>
         <h2>Packs list</h2>
-        <button onClick={addNewPackHandler}>Add new pack</button>
+        {/*<button onClick={addNewPackHandler}>Add new pack</button>*/}
+        <AddPackModal
+          title={"Add new pack"}
+          addNewPackHandler={addNewPackHandler}
+        />
       </div>
       <SearchBar />
       <TableContainer component={Paper}>
