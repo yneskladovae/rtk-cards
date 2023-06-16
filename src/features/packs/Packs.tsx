@@ -19,7 +19,7 @@ import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
 import { packsParamsActions } from "features/packs/packsParams.slice";
 import { useDebounce } from "common/hooks/useDebounce";
-import { AddPackModal } from "components/modal/packModal/AddPackModal";
+import { PackModal } from "components/modal/packModal/PackModal";
 
 export const Packs = () => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
@@ -75,22 +75,41 @@ export const Packs = () => {
     dispatch(packsThunks.deletePack(packId));
   };
 
-  const updatePackNameHandler = (packId: string) => {
+  // const editPackHandler =
+  //   (packId: string) => (packName: string, isPrivate: boolean) => {
+  //     debugger;
+  //     dispatch(packsActions.setPackName({ packName: packName }));
+  //     dispatch(packsActions.setIsPrivate({ isPrivate: isPrivate }));
+  //     const payload = {
+  //       cardsPack: { _id: packId, name: packName, private: isPrivate },
+  //     };
+  //     dispatch(packsThunks.updatePackName(payload));
+  //   };
+  const editPackHandler = (
+    packId: string,
+    packName: string,
+    isPrivate: boolean
+  ) => {
+    debugger;
+    dispatch(packsActions.setPackName({ packName: packName }));
+    dispatch(packsActions.setIsPrivate({ isPrivate: isPrivate }));
     const payload = {
-      cardsPack: {
-        _id: packId,
-        name: "Update test pack",
-      },
+      cardsPack: { _id: packId, name: packName, private: isPrivate },
     };
     dispatch(packsThunks.updatePackName(payload));
   };
+
+  // [isModalOpen, setisModalOpen]
 
   return (
     <div className={s.packsBlock}>
       <div className={s.packsHeader}>
         <h2>Packs list</h2>
         {/*<button onClick={addNewPackHandler}>Add new pack</button>*/}
-        <AddPackModal
+        <PackModal
+          // open
+          // callback = {() => addNewPackHandler; setIsOpen(false)}
+          // onClose
           title={"Add new pack"}
           addNewPackHandler={addNewPackHandler}
         />
@@ -124,11 +143,20 @@ export const Packs = () => {
                   <img src={learn} alt="Learn icon" />
                   {profile?._id === row.user_id && (
                     <>
-                      <img
-                        onClick={() => updatePackNameHandler(row._id)}
-                        src={edit}
-                        alt="Edit icon"
+                      <PackModal
+                        //editPackHandler={() => editPackHandler(row._id)}
+                        editPackHandler={(
+                          packName: string,
+                          isPrivate: boolean
+                        ) => editPackHandler(row._id, packName, isPrivate)}
+                        title={"Edit pack"}
+                        oldPackName={row.name}
                       />
+                      {/*<img*/}
+                      {/*  onClick={editPackHandler}*/}
+                      {/*  src={edit}*/}
+                      {/*  alt="Edit icon"*/}
+                      {/*/>*/}
                       <img
                         onClick={() => deletePackHandler(row._id)}
                         src={trash}

@@ -39,7 +39,7 @@ export type ArgUpdatePackNameType = {
   cardsPack: {
     name?: string;
     deckCover?: string;
-    private?: false;
+    private?: boolean;
   };
 };
 
@@ -58,6 +58,7 @@ export type CardPacksType = {
   cardsCount: number;
   created: string;
   updated: string;
+  private: boolean;
 };
 
 export type GetCardPacksResponseType = {
