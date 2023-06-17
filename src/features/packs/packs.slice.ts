@@ -64,8 +64,20 @@ export const slice = createSlice({
     maxCardsCount: 1,
     minCardsCount: 1,
     pageCount: 1,
+    packId: "",
+    currPackName: "",
   },
-  reducers: {},
+  reducers: {
+    setPackId: (state, action: PayloadAction<{ packId: string }>) => {
+      state.packId = action.payload.packId;
+    },
+    setCurrPackName: (
+      state,
+      action: PayloadAction<{ currPackName: string }>
+    ) => {
+      state.currPackName = action.payload.currPackName;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCardPacks.fulfilled, (state, action) => {
       state.cardPacks = action.payload.data.cardPacks;

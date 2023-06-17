@@ -22,7 +22,6 @@ export const SearchBar = () => {
   const debounceRange = useDebounce<number[]>(rangeValues, 500);
   const [searchParams, setSearchParams] = useSearchParams("");
   const dispatch = useAppDispatch();
-  console.log("SearchBar", searchParams);
   useEffect(() => {
     dispatch(
       packsParamsActions.setSearchPacksName({ packName: searchPacksName })
