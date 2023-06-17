@@ -33,7 +33,7 @@ export const AddPackModal: FC<AddPackModalType> = ({
 
   const handleSave = () => {
     addNewPackHandler(packName, isPrivate);
-    setPackName(""); // Обнуление значения packName
+    setPackName("");
   };
 
   return (
