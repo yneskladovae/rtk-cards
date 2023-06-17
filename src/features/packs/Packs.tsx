@@ -35,7 +35,7 @@ export const Packs = () => {
   const profile = useAppSelector((state) => state.auth.profile);
   const [searchParams, setSearchParams] = useSearchParams("");
   const dispatch = useAppDispatch();
-  console.log("Packs", searchParams.get("packName"));
+  console.log("Packs", searchParams);
 
   const [isAddPackModalOpen, setIsAddPackModalOpen] = useState<boolean>(false);
   const [isEditPackModalOpen, setIsEditPackModalOpen] =
@@ -63,7 +63,7 @@ export const Packs = () => {
 
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
-  // console.log(queryParams);
+  console.log(queryParams);
 
   // useLayoutEffect(() => {
   //   console.log(location.search);

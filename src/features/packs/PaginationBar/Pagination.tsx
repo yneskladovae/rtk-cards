@@ -17,50 +17,30 @@ export const PaginationBar = () => {
   );
 
   const page = useAppSelector((state) => state.packs.page);
-  const [currentPage, setCurrentPage] = useState(page);
+  // const [currentPage, setCurrentPage] = useState(page);
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  console.log("PaginationBar", searchParams);
 
-  // const location = useLocation();
-  // const queryParams = queryString.parse(location.search);
-  // console.log(queryParams);
+  const location = useLocation();
+  const history = useNavigate();
 
-  // const [currentPage, setCurrentPage] = useState(() => {
-  //   const storedPage = localStorage.getItem("currentPage");
-  //   return storedPage ? Number(storedPage) : 1;
-  // });
-  //
-  // useEffect(() => {
-  //   localStorage.setItem("currentPage", currentPage.toString());
-  // }, [currentPage]);
-
-  // const location = useLocation();
-  // const history = useNavigate();
-  //
-  // const queryParams = queryString.parse(location.search);
-  // const currentPage = Number(queryParams.page) || 1;
-  //
-  // const pageChangeHandler = (page: number) => {
-  //   const updatedParams = queryString.stringify({ ...queryParams, page });
-  //   history(`?${updatedParams}`);
-  //   dispatch(packsParamsActions.setPage({ page }));
-  // };
-
-  // useEffect(() => {
-  //   setSearchParams({
-  //     page: currentPage.toString(),
-  //   });
-  // });
+  const queryParams = queryString.parse(location.search);
+  const currentPage = Number(queryParams.page) || 1;
 
   const pageChangeHandler = (page: number) => {
-    setCurrentPage(page);
-    // setSearchParams({
-    //   ...Object.fromEntries(searchParams),
-    //   page: page.toString(),
-    // });
-    dispatch(packsParamsActions.setPage({ page: page }));
+    const updatedParams = queryString.stringify({ ...queryParams, page });
+    history(`?${updatedParams}`);
+    dispatch(packsParamsActions.setPage({ page }));
   };
+
+  // const pageChangeHandler = (page: number) => {
+  //   setCurrentPage(page);
+  //   setSearchParams({
+  //     ...Object.fromEntries(searchParams),
+  //     page: page.toString(),
+  //   });
+  //   dispatch(packsParamsActions.setPage({ page: page }));
+  // };
 
   const pageCountChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
     let pageCount = Number(event.target.value);
