@@ -56,7 +56,6 @@ export const Packs = () => {
       cardsPack: { name: packName, private: isPrivate },
     };
     dispatch(packsThunks.addNewPack(payload));
-    dispatch(packsActions.setCurrPackName({ currPackName: "" }));
   };
 
   const deletePackHandler = (packId: any) => {

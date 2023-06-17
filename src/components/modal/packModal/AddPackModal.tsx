@@ -4,8 +4,6 @@ import TextField from "@mui/material/TextField";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { packsActions } from "features/packs/packs.slice";
-import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 type AddPackModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,20 +18,22 @@ export const AddPackModal: FC<AddPackModalType> = ({
   title,
   addNewPackHandler,
 }) => {
-  const currPackName = useAppSelector((state) => state.packs.currPackName);
+  const [packName, setPackName] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState(false);
-  const dispatch = useAppDispatch();
 
   const packNameChangeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    dispatch(
-      packsActions.setCurrPackName({ currPackName: e.currentTarget.value })
-    );
+    setPackName(e.currentTarget.value);
   };
 
   const isPrivateChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setIsPrivate(e.currentTarget.checked);
+  };
+
+  const handleSave = () => {
+    addNewPackHandler(packName, isPrivate);
+    setPackName(""); // Обнуление значения packName
   };
 
   return (
@@ -41,7 +41,7 @@ export const AddPackModal: FC<AddPackModalType> = ({
       <div>
         <h1>{title}</h1>
         <TextField
-          value={currPackName}
+          value={packName}
           onChange={(e) => packNameChangeHandler(e)}
           variant={"standard"}
           label={"Name pack"}
@@ -58,12 +58,7 @@ export const AddPackModal: FC<AddPackModalType> = ({
         <Button onClick={() => {}} variant={"outlined"}>
           Cancel
         </Button>
-        <Button
-          onClick={() => {
-            addNewPackHandler(currPackName, isPrivate);
-          }}
-          variant="contained"
-        >
+        <Button onClick={handleSave} variant="contained">
           Save
         </Button>
       </div>
