@@ -19,15 +19,12 @@ import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
 import queryString from "query-string";
 import { DeletePackModal } from "components/modal/deleteModal/DeletePackModal";
-import { packsParamsActions } from "features/packs/packsParams.slice";
 import { AddPackModal } from "components/modal/packModal/AddPackModal";
 import { EditPackModal } from "components/modal/packModal/EditPackModal";
 
 export const Packs = () => {
   const packs = useAppSelector((state) => state.packs.cardPacks);
   const packId = useAppSelector((state) => state.packs.packId);
-  const currPackName = useAppSelector((state) => state.packs.currPackName);
-  const pageCount = useAppSelector((state) => state.packs.pageCount);
   const params = useAppSelector((state) => state.packsParams);
   const profile = useAppSelector((state) => state.auth.profile);
   const [searchParams, setSearchParams] = useSearchParams("");
