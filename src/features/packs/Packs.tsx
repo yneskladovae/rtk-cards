@@ -18,7 +18,7 @@ import { formatDate } from "common/utils";
 import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
 import queryString from "query-string";
-import { DeleteModal } from "components/modal/deleteModal/DeleteModal";
+import { DeletePackModal } from "components/modal/deleteModal/DeletePackModal";
 import { packsParamsActions } from "features/packs/packsParams.slice";
 import { AddPackModal } from "components/modal/packModal/AddPackModal";
 import { EditPackModal } from "components/modal/packModal/EditPackModal";
@@ -58,12 +58,14 @@ export const Packs = () => {
     dispatch(packsThunks.addNewPack(payload));
   };
 
-  const deletePackHandler = (packId: any) => {
+  const deletePackHandler = () => {
     dispatch(packsThunks.deletePack(packId));
     setDeleteModalOpen(false);
   };
 
-  const deletePackModalHandler = () => {
+  const deletePackModalHandler = (packId: string, currPackName: string) => {
+    dispatch(packsActions.setPackId({ packId }));
+    dispatch(packsActions.setCurrPackName({ currPackName }));
     setDeleteModalOpen(true);
   };
 
@@ -123,7 +125,9 @@ export const Packs = () => {
                         alt="Edit icon"
                       />
                       <img
-                        onClick={deletePackModalHandler}
+                        onClick={() =>
+                          deletePackModalHandler(row._id, row.name)
+                        }
                         src={trash}
                         alt="Trash icon"
                       />
@@ -148,6 +152,12 @@ export const Packs = () => {
           title={"Edit pack"}
           isOpen={isEditPackModalOpen}
           setIsOpen={setIsEditPackModalOpen}
+        />
+        <DeletePackModal
+          deletePackHandler={deletePackHandler}
+          title={"Delete pack"}
+          isOpen={deleteModalOpen}
+          setIsOpen={setDeleteModalOpen}
         />
       </>
     </div>

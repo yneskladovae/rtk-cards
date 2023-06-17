@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, ReactNode, useState } from "react";
 import { BasicModal } from "components/modal/BasicModal";
 import TextField from "@mui/material/TextField";
 import { Checkbox, FormControlLabel } from "@mui/material";
@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { useAppSelector } from "common/hooks/useAppSelector";
 
 type AddPackModalType = {
+  children: ReactNode;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   title: string;
@@ -15,6 +16,7 @@ type AddPackModalType = {
 };
 
 export const PackModal: FC<AddPackModalType> = ({
+  children,
   setIsOpen,
   isOpen,
   title,
@@ -39,30 +41,7 @@ export const PackModal: FC<AddPackModalType> = ({
   };
 
   return (
-    <BasicModal
-      setIsOpen={setIsOpen}
-      isOpen={isOpen}
-      // title={title}
-      // childrenButton={
-      //   <Button
-      //     onClick={() => {
-      //       if (title === "Add new pack") {
-      //         if (addNewPackHandler) {
-      //           addNewPackHandler(packName, isPrivate);
-      //         }
-      //       } else {
-      //         if (editPackHandler) {
-      //           debugger;
-      //           editPackHandler(packName, isPrivate);
-      //         }
-      //       }
-      //     }}
-      //     variant="contained"
-      //   >
-      //     Save
-      //   </Button>
-      // }
-    >
+    <BasicModal setIsOpen={setIsOpen} isOpen={isOpen}>
       <div>
         <h1>{title}</h1>
         <TextField
@@ -99,6 +78,7 @@ export const PackModal: FC<AddPackModalType> = ({
         >
           Save
         </Button>
+        <div>{children}</div>
       </div>
     </BasicModal>
   );

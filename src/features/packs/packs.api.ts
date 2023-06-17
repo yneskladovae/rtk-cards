@@ -31,9 +31,7 @@ export type ArgGetParamsType = {
   user_id?: string;
 };
 
-export type ArgDeletePackType = {
-  packId: any;
-};
+export type ArgDeletePackType = string;
 
 export type ArgUpdatePackNameType = {
   cardsPack: {

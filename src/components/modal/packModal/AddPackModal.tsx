@@ -3,7 +3,6 @@ import { BasicModal } from "components/modal/BasicModal";
 import TextField from "@mui/material/TextField";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import Button from "@mui/material/Button";
-import { useAppSelector } from "common/hooks/useAppSelector";
 
 type AddPackModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,7 +54,7 @@ export const AddPackModal: FC<AddPackModalType> = ({
           }
           label="Private pack"
         />
-        <Button onClick={() => {}} variant={"outlined"}>
+        <Button onClick={() => setIsOpen(false)} variant={"outlined"}>
           Cancel
         </Button>
         <Button onClick={handleSave} variant="contained">
