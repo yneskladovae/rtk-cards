@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { cardsThunks } from "features/cards/cards.slice";
@@ -16,8 +16,10 @@ import edit from "assets/svg/edit.svg";
 import trash from "assets/svg/trash.svg";
 import Rating from "@mui/material/Rating";
 import { formatDate } from "common/utils";
+import { AddCardModal } from "components/modal/cardModal/AddCardModal";
 
 export const Cards = () => {
+  const [isAddCardModal, setIsAddCardModal] = useState<boolean>(false);
   const userId = useAppSelector((state) => state.auth.profile?._id);
   const [value, setValue] = React.useState<number | null>(0);
   const dispatch = useAppDispatch();
@@ -29,13 +31,14 @@ export const Cards = () => {
     dispatch(cardsThunks.getCards(id));
   }, [dispatch]);
 
-  const addNewCardHandler = () => {
-    const card = {
+  const addNewCardHandler = (question: string, answer: string) => {
+    setIsAddCardModal(false);
+    const newCard = {
       cardsPack_id: id,
-      question: "Siiiiiiiiiiiiiiiiiiiiiiiu",
-      answer: "Yes",
+      question: question,
+      answer: answer,
     };
-    dispatch(cardsThunks.addNewCard(card));
+    dispatch(cardsThunks.addNewCard(newCard));
   };
 
   const deleteCardHandler = (cardId: string) => {
@@ -60,6 +63,10 @@ export const Cards = () => {
     dispatch(cardsThunks.updateGradeCard(payload));
   };
 
+  const addNewCardModalHandler = () => {
+    setIsAddCardModal(true);
+  };
+
   return (
     <div className={s.cardsBlock}>
       <BackToPackListLink />
@@ -74,7 +81,7 @@ export const Cards = () => {
                 This pack is empty. Click add new card to fill this pack
               </p>
               <button
-                onClick={addNewCardHandler}
+                onClick={addNewCardModalHandler}
                 className={s.emptyCardsButton}
               >
                 Add new card
@@ -87,14 +94,14 @@ export const Cards = () => {
               <h1 className={s.maimHeader}>{cards.packName}</h1>
               {userId === cardsUserId ? (
                 <button
-                  onClick={addNewCardHandler}
+                  onClick={addNewCardModalHandler}
                   className={s.emptyCardsButton}
                 >
                   Add new card
                 </button>
               ) : (
                 <button
-                  onClick={addNewCardHandler}
+                  // onClick={addNewCardHandler}
                   className={s.emptyCardsButton}
                 >
                   Learn to pack
@@ -130,12 +137,8 @@ export const Cards = () => {
                       </TableCell>
                       <TableCell className={s.gradeBlock} align="center">
                         <Rating
-                          // onClick={() => updateGradeCardHandler(row._id)}
                           name="simple-controlled"
                           value={row.grade}
-                          // onChange={(event, newValue) => {
-                          //   setValue(newValue);
-
                           onChange={(event, value) =>
                             updateGradeCardHandler(value, row._id)
                           }
@@ -164,6 +167,14 @@ export const Cards = () => {
             </TableContainer>
           </div>
         )}
+        <>
+          <AddCardModal
+            setIsOpen={setIsAddCardModal}
+            isOpen={isAddCardModal}
+            title={"Add new card"}
+            addNewCardHandler={addNewCardHandler}
+          />
+        </>
       </div>
     </div>
   );
