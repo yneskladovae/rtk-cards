@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import s from "./BasicModal.module.css";
 
 const style = {
   position: "absolute" as "absolute",
@@ -17,8 +17,6 @@ const style = {
 
 type BasicModalType = {
   children?: ReactNode;
-  childrenButton?: ReactNode;
-  title?: string;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -27,22 +25,14 @@ export const BasicModal: FC<BasicModalType> = ({
   children,
   isOpen,
   setIsOpen,
-  title,
-  childrenButton,
 }) => {
-  // const [open, setOpen] = useState(isOpen);
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
   return (
     <Modal open={isOpen} onClose={() => setIsOpen((state) => !state)}>
-      <Box sx={style}>
-        <div>
-          {children}
-          {/*<div onClick={handleClose}>{childrenButton}</div>*/}
-        </div>
+      <Box
+        // className={s.style}
+        sx={style}
+      >
+        <div>{children}</div>
       </Box>
     </Modal>
   );

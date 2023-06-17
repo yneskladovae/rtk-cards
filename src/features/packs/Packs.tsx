@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import s from "./Packs.module.css";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { packsActions, packsThunks } from "features/packs/packs.slice";
+import { packsThunks } from "features/packs/packs.slice";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -25,6 +25,7 @@ import { PaginationBar } from "features/packs/PaginationBar/Pagination";
 import { SearchBar } from "features/packs/SearchBar/SearchBar";
 import { PackModal } from "components/modal/packModal/PackModal";
 import queryString from "query-string";
+import { DeleteModal } from "components/modal/deleteModal/DeleteModal";
 import { packsParamsActions } from "features/packs/packsParams.slice";
 
 export const Packs = () => {
@@ -34,8 +35,12 @@ export const Packs = () => {
   const profile = useAppSelector((state) => state.auth.profile);
   const [searchParams, setSearchParams] = useSearchParams("");
   const dispatch = useAppDispatch();
+  console.log("Packs", searchParams.get("packName"));
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isAddPackModalOpen, setIsAddPackModalOpen] = useState<boolean>(false);
+  const [isEditPackModalOpen, setIsEditPackModalOpen] =
+    useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   // useEffect(() => {
   //   dispatch(setParams(searchParams));
@@ -57,31 +62,27 @@ export const Packs = () => {
   // }, [dispatch, searchParams]);
 
   const location = useLocation();
-  useLayoutEffect(() => {
-    console.log(location.search);
-    const queryParamss = queryString.parse(location.search);
-    console.log(queryParamss);
-    // dispatch(
-    //   packsParamsActions.setParams({
-    //     queryParams: queryParamss,
-    //   })
-    // );
-    dispatch(packsThunks.getCardPacks(queryParamss));
-  }, []);
+  const queryParams = queryString.parse(location.search);
+  // console.log(queryParams);
+
+  // useLayoutEffect(() => {
+  //   console.log(location.search);
+  //   const queryParams = queryString.parse(location.search);
+  //   console.log(queryParams);
+  //   // dispatch(
+  //   //   packsParamsActions.setParams({
+  //   //     queryParams: queryParams,
+  //   //   })
+  //   // );
+  //   dispatch(packsThunks.getCardPacks(queryParams));
+  // }, []);
 
   useEffect(() => {
-    dispatch(packsThunks.getCardPacks(params.queryParams));
-    // dispatch(packsThunks.getCardPacks({ ...Object.fromEntries(searchParams) }));
-  }, [dispatch, params.queryParams]);
-
-  // const addNewPackHandler = () => {
-  //   dispatch(packsThunks.addNewPack({ cardsPack: { name: "New test pack" } }));
-  // };
+    dispatch(packsThunks.getCardPacks(queryParams));
+  }, [dispatch, params]);
 
   const addNewPackHandler = (packName: string, isPrivate: boolean) => {
-    setIsModalOpen(false);
-    dispatch(packsActions.setPackName({ packName: "" }));
-    dispatch(packsActions.setIsPrivate({ isPrivate: false }));
+    setIsAddPackModalOpen(false);
     const payload = {
       cardsPack: { name: packName, private: isPrivate },
     };
@@ -90,26 +91,19 @@ export const Packs = () => {
 
   const deletePackHandler = (packId: any) => {
     dispatch(packsThunks.deletePack(packId));
+    setDeleteModalOpen(false);
   };
 
-  // const editPackHandler =
-  //   (packId: string) => (packName: string, isPrivate: boolean) => {
-  //     debugger;
-  //     dispatch(packsActions.setPackName({ packName: packName }));
-  //     dispatch(packsActions.setIsPrivate({ isPrivate: isPrivate }));
-  //     const payload = {
-  //       cardsPack: { _id: packId, name: packName, private: isPrivate },
-  //     };
-  //     dispatch(packsThunks.updatePackName(payload));
-  //   };
+  const deletePackModalHandler = () => {
+    setDeleteModalOpen(true);
+  };
+
   const editPackHandler = (
     packId: string,
     packName: string,
     isPrivate: boolean
   ) => {
-    debugger;
-    dispatch(packsActions.setPackName({ packName: packName }));
-    dispatch(packsActions.setIsPrivate({ isPrivate: isPrivate }));
+    setIsEditPackModalOpen(false);
     const payload = {
       cardsPack: { _id: packId, name: packName, private: isPrivate },
     };
@@ -117,7 +111,11 @@ export const Packs = () => {
   };
 
   const addNewPackModalHandler = () => {
-    setIsModalOpen(true);
+    setIsAddPackModalOpen(true);
+  };
+
+  const editPackModalHandler = () => {
+    setIsEditPackModalOpen(true);
   };
 
   return (
@@ -125,21 +123,12 @@ export const Packs = () => {
       <div className={s.packsHeader}>
         <h2>Packs list</h2>
         <button onClick={addNewPackModalHandler}>Add new pack</button>
-        {isModalOpen && (
-          <PackModal
-            isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
-            title={"Add new pack"}
-            addNewPackHandler={addNewPackHandler}
-          />
-        )}
-        {/*<PackModal*/}
-        {/*  // open*/}
-        {/*  // callback = {() => addNewPackHandler; setIsOpen(false)}*/}
-        {/*  // onClose*/}
-        {/*  title={"Add new pack"}*/}
-        {/*  addNewPackHandler={addNewPackHandler}*/}
-        {/*/>*/}
+        <PackModal
+          isOpen={isAddPackModalOpen}
+          setIsOpen={setIsAddPackModalOpen}
+          title={"Add new pack"}
+          addNewPackHandler={addNewPackHandler}
+        />
       </div>
       <SearchBar />
       <TableContainer component={Paper}>
@@ -170,26 +159,36 @@ export const Packs = () => {
                   <img src={learn} alt="Learn icon" />
                   {profile?._id === row.user_id && (
                     <>
-                      {/*<PackModal*/}
-                      {/*  isOpen={false}*/}
-                      {/*  //editPackHandler={() => editPackHandler(row._id)}*/}
-                      {/*  editPackHandler={(*/}
-                      {/*    packName: string,*/}
-                      {/*    isPrivate: boolean*/}
-                      {/*  ) => editPackHandler(row._id, packName, isPrivate)}*/}
-                      {/*  title={"Edit pack"}*/}
-                      {/*  oldPackName={row.name}*/}
-                      {/*/>*/}
-                      {/*<img*/}
-                      {/*  onClick={editPackHandler}*/}
-                      {/*  src={edit}*/}
-                      {/*  alt="Edit icon"*/}
-                      {/*/>*/}
                       <img
-                        onClick={() => deletePackHandler(row._id)}
+                        onClick={() => editPackModalHandler()}
+                        src={edit}
+                        alt="Edit icon"
+                      />
+                      {isEditPackModalOpen && (
+                        <PackModal
+                          isOpen={isEditPackModalOpen}
+                          setIsOpen={setIsEditPackModalOpen}
+                          editPackHandler={(
+                            packName: string,
+                            isPrivate: boolean
+                          ) => editPackHandler(row._id, packName, isPrivate)}
+                          title={"Edit pack"}
+                          oldPackName={row.name}
+                        />
+                      )}
+                      <img
+                        onClick={deletePackModalHandler}
                         src={trash}
                         alt="Trash icon"
                       />
+                      {deleteModalOpen && (
+                        <DeleteModal
+                          isOpen={deleteModalOpen}
+                          setIsOpen={setDeleteModalOpen}
+                          deletePackHandler={() => deletePackHandler(row._id)}
+                          title={"Delete pack"}
+                        />
+                      )}
                     </>
                   )}
                 </TableCell>

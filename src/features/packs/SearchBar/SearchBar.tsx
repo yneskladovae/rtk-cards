@@ -14,15 +14,15 @@ import { packsParamsActions } from "features/packs/packsParams.slice";
 
 export const SearchBar = () => {
   const authUserId = useAppSelector((state) => state.auth?.profile?._id);
-  const min = useAppSelector((state) => state.packsParams.queryParams.min);
-  const max = useAppSelector((state) => state.packsParams.queryParams.max);
+  const min = useAppSelector((state) => state.packsParams.min);
+  const max = useAppSelector((state) => state.packsParams.max);
   const [rangeValues, setRangeValues] = React.useState<number[]>([min, max]);
   const [searchPacksName, setSearchPacksName] = useState<string>("");
   const debounceName = useDebounce<string>(searchPacksName, 500);
   const debounceRange = useDebounce<number[]>(rangeValues, 500);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams("");
   const dispatch = useAppDispatch();
-
+  console.log("SearchBar", searchParams);
   useEffect(() => {
     dispatch(
       packsParamsActions.setSearchPacksName({ packName: searchPacksName })
@@ -31,11 +31,11 @@ export const SearchBar = () => {
 
   useEffect(() => {
     dispatch(packsParamsActions.setRangeValues({ rangeValues: rangeValues }));
-    setSearchParams({
-      ...Object.fromEntries(searchParams),
-      min: rangeValues[0].toString(),
-      max: rangeValues[1].toString(),
-    });
+    // setSearchParams({
+    //   ...Object.fromEntries(searchParams),
+    //   min: rangeValues[0].toString(),
+    //   max: rangeValues[1].toString(),
+    // });
   }, [debounceRange]);
 
   const searchPacksNameHandler = (
@@ -52,11 +52,11 @@ export const SearchBar = () => {
   };
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    // setSearchParams({
-    //   ...Object.fromEntries(searchParams),
-    //   max: maxCardsCount.toString(),
-    //   min: minCardsCount.toString(),
-    // });
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      min: rangeValues[0].toString(),
+      max: rangeValues[1].toString(),
+    });
     setRangeValues(newValue as number[]);
     // dispatch(
     //   packsThunks.getCardPacks({ min: minCardsCount, max: maxCardsCount })
@@ -70,6 +70,11 @@ export const SearchBar = () => {
     } else {
       dispatch(packsThunks.getCardPacks({}));
     }
+  };
+
+  const resetAllFiltersHandler = () => {
+    dispatch(packsThunks.getCardPacks({}));
+    setSearchParams({});
   };
 
   return (
@@ -115,7 +120,7 @@ export const SearchBar = () => {
         </div>
       </div>
       <div className={s.reset}>
-        <img src={reset} alt="Reset button" />
+        <img onClick={resetAllFiltersHandler} src={reset} alt="Reset button" />
       </div>
     </div>
   );

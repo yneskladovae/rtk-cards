@@ -3,6 +3,7 @@ import { BasicModal } from "components/modal/BasicModal";
 import TextField from "@mui/material/TextField";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import Button from "@mui/material/Button";
+import { useAppSelector } from "common/hooks/useAppSelector";
 
 type AddPackModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +25,7 @@ export const PackModal: FC<AddPackModalType> = ({
   const [packName, setPackName] = useState<string>(
     title === "Add new pack" ? "" : oldPackName || ""
   );
+  console.log(oldPackName);
   const [isPrivate, setIsPrivate] = useState(false);
 
   const packNameChangeHandler = (
@@ -89,7 +91,6 @@ export const PackModal: FC<AddPackModalType> = ({
               }
             } else {
               if (editPackHandler) {
-                debugger;
                 editPackHandler(packName, isPrivate);
               }
             }

@@ -1,0 +1,12 @@
+.style {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    width: 400px;
+    box-shadow: 0 4px 4px;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.57);
+    padding: 20px;
+    border: none;
+}
