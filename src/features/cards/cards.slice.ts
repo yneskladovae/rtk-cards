@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAppAsyncThunk, thunkTryCatch } from "common/utils";
 import {
-  ArgAddNewPackType,
-  ArgDeletePackType,
-  ArgUpdatePackNameType,
-  CardPacksType,
-  GetCardPacksResponseType,
-  packsApi,
-} from "features/packs/packs.api";
-import {
   ArgAddNewCardType,
   ArgDeleteCardType,
   cardsAPI,
@@ -16,7 +8,6 @@ import {
   CardsType,
   GetCardsResponseType,
 } from "features/cards/cards.api";
-import { packsThunks } from "features/packs/packs.slice";
 
 const getCards = createAppAsyncThunk<
   { cardsData: GetCardsResponseType },
