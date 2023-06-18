@@ -15,8 +15,8 @@ import trash from "../../assets/svg/trash.svg";
 import edit from "../../assets/svg/edit.svg";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { formatDate } from "common/utils";
-import { PaginationBar } from "features/packs/paginationBar/Pagination";
-import { SearchBar } from "features/packs/searchBar/SearchBar";
+import { PaginationBar } from "features/packs/pagination/Pagination";
+import { FilterPanel } from "features/packs/filterPanel/FilterPanel";
 import queryString from "query-string";
 import { DeletePackModal } from "components/modal/deleteModal/DeletePackModal";
 import { AddPackModal } from "components/modal/packModal/AddPackModal";
@@ -87,7 +87,7 @@ export const Packs = () => {
         <h2>Packs list</h2>
         <button onClick={addNewPackModalHandler}>Add new pack</button>
       </div>
-      <SearchBar />
+      <FilterPanel />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead style={{ background: "#EFEFEF" }}>
