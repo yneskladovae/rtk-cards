@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { cardsThunks } from "features/cards/cards.slice";
+import { cardsActions, cardsThunks } from "features/cards/cards.slice";
 import { Link, useParams } from "react-router-dom";
 import { BackToPackListLink } from "components/backToPackListLink/BackToPackListLink";
 import s from "./cards.module.css";
@@ -17,10 +17,14 @@ import trash from "assets/svg/trash.svg";
 import Rating from "@mui/material/Rating";
 import { formatDate } from "common/utils";
 import { AddCardModal } from "components/modal/cardModal/AddCardModal";
+import { EditCardModal } from "components/modal/cardModal/EditCardModal";
+import { packsActions } from "features/packs/packs.slice";
 
 export const Cards = () => {
   const [isAddCardModal, setIsAddCardModal] = useState<boolean>(false);
+  const [isEditCardModal, setIsEditCardModal] = useState<boolean>(false);
   const userId = useAppSelector((state) => state.auth.profile?._id);
+  const cardId = useAppSelector((state) => state.cards.cardId);
   const [value, setValue] = React.useState<number | null>(0);
   const dispatch = useAppDispatch();
   const cards = useAppSelector((state) => state.cards);
@@ -45,11 +49,13 @@ export const Cards = () => {
     dispatch(cardsThunks.deleteCard(cardId));
   };
 
-  const updateCardHandler = (cardId: string, cardsPackId: string) => {
+  const updateCardHandler = (answer: string, question: string) => {
+    setIsEditCardModal(false);
     const payload = {
+      cardsPack_id: id,
       _id: cardId,
-      question: "Napoli?",
-      cardsPack_id: cardsPackId,
+      question: answer,
+      answer: question,
     };
     dispatch(cardsThunks.updateCard(payload));
   };
@@ -65,6 +71,17 @@ export const Cards = () => {
 
   const addNewCardModalHandler = () => {
     setIsAddCardModal(true);
+  };
+
+  const editCardModalHandler = (
+    cardId: string,
+    answer: string,
+    question: string
+  ) => {
+    setIsEditCardModal(true);
+    dispatch(cardsActions.setCardId({ cardId }));
+    dispatch(cardsActions.setCurrCardQuestion({ currCardQuestion: question }));
+    dispatch(cardsActions.setCurrCardAnswer({ currCardAnswer: answer }));
   };
 
   return (
@@ -147,7 +164,11 @@ export const Cards = () => {
                           <div className={s.iconsBlock}>
                             <img
                               onClick={() =>
-                                updateCardHandler(row._id, row.cardsPack_id)
+                                editCardModalHandler(
+                                  row._id,
+                                  row.answer,
+                                  row.question
+                                )
                               }
                               src={edit}
                               alt="Edit icon"
@@ -167,15 +188,21 @@ export const Cards = () => {
             </TableContainer>
           </div>
         )}
-        <>
-          <AddCardModal
-            setIsOpen={setIsAddCardModal}
-            isOpen={isAddCardModal}
-            title={"Add new card"}
-            addNewCardHandler={addNewCardHandler}
-          />
-        </>
       </div>
+      <>
+        <AddCardModal
+          setIsOpen={setIsAddCardModal}
+          isOpen={isAddCardModal}
+          title={"Add new card"}
+          addNewCardHandler={addNewCardHandler}
+        />
+        <EditCardModal
+          setIsOpen={setIsEditCardModal}
+          isOpen={isEditCardModal}
+          title={"Edit card"}
+          updateCardHandler={updateCardHandler}
+        />
+      </>
     </div>
   );
 };

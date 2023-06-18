@@ -92,8 +92,27 @@ export const slice = createSlice({
     packUserId: "",
     packUpdated: "",
     packName: "",
+    cardId: "",
+    currCardQuestion: "",
+    currCardAnswer: "",
   },
-  reducers: {},
+  reducers: {
+    setCardId: (state, action: PayloadAction<{ cardId: string }>) => {
+      state.cardId = action.payload.cardId;
+    },
+    setCurrCardQuestion: (
+      state,
+      action: PayloadAction<{ currCardQuestion: string }>
+    ) => {
+      state.currCardQuestion = action.payload.currCardQuestion;
+    },
+    setCurrCardAnswer: (
+      state,
+      action: PayloadAction<{ currCardAnswer: string }>
+    ) => {
+      state.currCardAnswer = action.payload.currCardAnswer;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCards.fulfilled, (state, action) => {
       state.cards = action.payload.cards;
@@ -106,6 +125,9 @@ export const slice = createSlice({
       state.packUpdated = action.payload.packUpdated;
       state.packName = action.payload.packName;
     });
+    // .addCase(updateCard.fulfilled, (state, action) => {
+    //
+    // });
   },
 });
 
