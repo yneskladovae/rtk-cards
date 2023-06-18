@@ -34,7 +34,10 @@ export const Cards = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(cardsThunks.getCards(id));
+    if (id) {
+      dispatch(cardsThunks.getCards({ cardsPack_id: id }));
+      dispatch(cardsActions.setCardsPackId({ cardsPackId: id }));
+    }
   }, [dispatch]);
 
   const addNewCardModalHandler = () => {
@@ -44,12 +47,14 @@ export const Cards = () => {
 
   const addNewCardHandler = (question: string, answer: string) => {
     setIsAddCardModal(false);
-    const newCard = {
-      cardsPack_id: id,
-      question: question,
-      answer: answer,
-    };
-    dispatch(cardsThunks.addNewCard(newCard));
+    if (id) {
+      const newCard = {
+        cardsPack_id: id,
+        question: question,
+        answer: answer,
+      };
+      dispatch(cardsThunks.addNewCard(newCard));
+    }
   };
 
   const deleteCardModalHandler = (cardId: string, question: string) => {
@@ -62,7 +67,7 @@ export const Cards = () => {
 
   const deleteCardHandler = () => {
     setIsDeleteCardModal(false);
-    dispatch(cardsThunks.deleteCard(cardId));
+    dispatch(cardsThunks.deleteCard({ id: cardId }));
   };
 
   const updateCardHandler = (answer: string, question: string) => {

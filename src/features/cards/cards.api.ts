@@ -1,16 +1,14 @@
 import { instance } from "common/api/common.api";
 
 export const cardsAPI = {
-  getCards(cardId: string | undefined) {
-    return instance.get<GetCardsResponseType>(
-      `cards/card?cardsPack_id=${cardId}`
-    );
+  getCards(params: CardsParamsType) {
+    return instance.get<GetCardsResponseType>(`cards/card`, { params });
   },
   addNewCard(arg: ArgAddNewCardType) {
     return instance.post<CardsType>(`cards/card`, { card: arg });
   },
-  deleteCard(cardId: string | undefined) {
-    return instance.delete<CardsType>(`cards/card?id=${cardId}`);
+  deleteCard(arg: ArgDeleteCardType) {
+    return instance.delete<CardsType>(`cards/card?id=${arg.id}`);
   },
   updateCard(arg: ArgUpdateCardType) {
     return instance.put<CardsType>(`cards/card`, { card: arg });
@@ -20,10 +18,18 @@ export const cardsAPI = {
   },
 };
 
-// export type ArgDeleteCardType = {
-//   cardId: string | undefined;
-//   cardsPack_id: string;
-// };
+export type CardsParamsType = {
+  cardsPack_id: string;
+  cardQuestion?: string;
+  cardAnswer?: string;
+  sortCards?: string;
+  page?: number;
+  pageCount?: number;
+};
+
+export type ArgDeleteCardType = {
+  id: string;
+};
 
 export type ArgUpdateGradeCardType = {
   grade: number;
@@ -37,7 +43,7 @@ export type ArgUpdateCardType = {
 };
 
 export type ArgAddNewCardType = {
-  cardsPack_id: string | undefined;
+  cardsPack_id: string;
   question: string;
   answer: string;
 };

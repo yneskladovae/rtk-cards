@@ -10,32 +10,26 @@ import {
 } from "features/packs/packs.api";
 import {
   ArgAddNewCardType,
+  ArgDeleteCardType,
   cardsAPI,
+  CardsParamsType,
   CardsType,
   GetCardsResponseType,
 } from "features/cards/cards.api";
 import { packsThunks } from "features/packs/packs.slice";
 
-const getCards = createAppAsyncThunk<GetCardsResponseType, string | undefined>(
-  "cards/getCards",
-  async (arg, thunkAPI) => {
-    const { dispatch } = thunkAPI;
-    return thunkTryCatch(thunkAPI, async () => {
-      const res = await cardsAPI.getCards(arg);
-      return {
-        cards: res.data.cards,
-        cardsTotalCount: res.data.cardsTotalCount,
-        maxGrade: res.data.maxGrade,
-        minGrade: res.data.minGrade,
-        page: res.data.page,
-        pageCount: res.data.pageCount,
-        packUserId: res.data.packUserId,
-        packUpdated: res.data.packUpdated,
-        packName: res.data.packName,
-      };
-    });
-  }
-);
+const getCards = createAppAsyncThunk<
+  { cardsData: GetCardsResponseType },
+  CardsParamsType
+>("cards/getCards", async (arg, thunkAPI) => {
+  const { dispatch } = thunkAPI;
+  return thunkTryCatch(thunkAPI, async () => {
+    const res = await cardsAPI.getCards(arg);
+    return {
+      cardsData: res.data,
+    };
+  });
+});
 
 const addNewCard = createAppAsyncThunk<void, ArgAddNewCardType>(
   "cards/addNewCard",
@@ -43,18 +37,19 @@ const addNewCard = createAppAsyncThunk<void, ArgAddNewCardType>(
     const { dispatch } = thunkAPI;
     return thunkTryCatch(thunkAPI, async () => {
       await cardsAPI.addNewCard(arg);
-      dispatch(cardsThunks.getCards(arg.cardsPack_id));
+      dispatch(cardsThunks.getCards(arg));
     });
   }
 );
 
-const deleteCard = createAppAsyncThunk<any, any>(
+const deleteCard = createAppAsyncThunk<void, ArgDeleteCardType>(
   "cards/deleteCard",
   async (arg, thunkAPI) => {
-    const { dispatch } = thunkAPI;
+    const { dispatch, getState } = thunkAPI;
+    const cardsPackId = getState().cards.cardsPackId;
     return thunkTryCatch(thunkAPI, async () => {
       await cardsAPI.deleteCard(arg);
-      // dispatch(cardsThunks.getCards(arg.cardsPack_id));
+      dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }));
     });
   }
 );
@@ -62,10 +57,11 @@ const deleteCard = createAppAsyncThunk<any, any>(
 const updateCard = createAppAsyncThunk<any, any>(
   "cards/updateCard",
   async (arg, thunkAPI) => {
-    const { dispatch } = thunkAPI;
+    const { dispatch, getState } = thunkAPI;
+    const cardsPackId = getState().cards.cardsPackId;
     return thunkTryCatch(thunkAPI, async () => {
       await cardsAPI.updateCard(arg);
-      dispatch(cardsThunks.getCards(arg.cardsPack_id));
+      dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }));
     });
   }
 );
@@ -73,9 +69,11 @@ const updateCard = createAppAsyncThunk<any, any>(
 const updateGradeCard = createAppAsyncThunk<any, any>(
   "cards/updateGradeCard",
   async (arg, thunkAPI) => {
-    const { dispatch } = thunkAPI;
+    const { dispatch, getState } = thunkAPI;
+    const cardsPackId = getState().cards.cardsPackId;
     return thunkTryCatch(thunkAPI, async () => {
       await cardsAPI.updateGradeCard(arg);
+      dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }));
     });
   }
 );
@@ -96,8 +94,12 @@ export const slice = createSlice({
     currCardQuestion: "",
     currCardAnswer: "",
     questionNameForDelete: "",
+    cardsPackId: "",
   },
   reducers: {
+    setCardsPackId: (state, action: PayloadAction<{ cardsPackId: string }>) => {
+      state.cardsPackId = action.payload.cardsPackId;
+    },
     setCardId: (state, action: PayloadAction<{ cardId: string }>) => {
       state.cardId = action.payload.cardId;
     },
@@ -122,15 +124,15 @@ export const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCards.fulfilled, (state, action) => {
-      state.cards = action.payload.cards;
-      state.cardsTotalCount = action.payload.cardsTotalCount;
-      state.maxGrade = action.payload.maxGrade;
-      state.minGrade = action.payload.minGrade;
-      state.page = action.payload.page;
-      state.pageCount = action.payload.pageCount;
-      state.packUserId = action.payload.packUserId;
-      state.packUpdated = action.payload.packUpdated;
-      state.packName = action.payload.packName;
+      state.cards = action.payload.cardsData.cards;
+      state.cardsTotalCount = action.payload.cardsData.cardsTotalCount;
+      state.maxGrade = action.payload.cardsData.maxGrade;
+      state.minGrade = action.payload.cardsData.minGrade;
+      state.page = action.payload.cardsData.page;
+      state.pageCount = action.payload.cardsData.pageCount;
+      state.packUserId = action.payload.cardsData.packUserId;
+      state.packUpdated = action.payload.cardsData.packUpdated;
+      state.packName = action.payload.cardsData.packName;
     });
     // .addCase(updateCard.fulfilled, (state, action) => {
     //
