@@ -95,10 +95,17 @@ export const slice = createSlice({
     cardId: "",
     currCardQuestion: "",
     currCardAnswer: "",
+    questionNameForDelete: "",
   },
   reducers: {
     setCardId: (state, action: PayloadAction<{ cardId: string }>) => {
       state.cardId = action.payload.cardId;
+    },
+    setQuestionNameForDelete: (
+      state,
+      action: PayloadAction<{ questionNameForDelete: string }>
+    ) => {
+      state.questionNameForDelete = action.payload.questionNameForDelete;
     },
     setCurrCardQuestion: (
       state,

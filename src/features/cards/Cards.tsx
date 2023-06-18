@@ -19,10 +19,12 @@ import { formatDate } from "common/utils";
 import { AddCardModal } from "components/modal/cardModal/AddCardModal";
 import { EditCardModal } from "components/modal/cardModal/EditCardModal";
 import { packsActions } from "features/packs/packs.slice";
+import { DeleteCardModal } from "components/modal/deleteModal/DeleteCardModal";
 
 export const Cards = () => {
   const [isAddCardModal, setIsAddCardModal] = useState<boolean>(false);
   const [isEditCardModal, setIsEditCardModal] = useState<boolean>(false);
+  const [isDeleteCardModal, setIsDeleteCardModal] = useState<boolean>(false);
   const userId = useAppSelector((state) => state.auth.profile?._id);
   const cardId = useAppSelector((state) => state.cards.cardId);
   const [value, setValue] = React.useState<number | null>(0);
@@ -35,6 +37,11 @@ export const Cards = () => {
     dispatch(cardsThunks.getCards(id));
   }, [dispatch]);
 
+  const addNewCardModalHandler = () => {
+    setIsAddCardModal(true);
+    dispatch(cardsActions.setCardId({ cardId }));
+  };
+
   const addNewCardHandler = (question: string, answer: string) => {
     setIsAddCardModal(false);
     const newCard = {
@@ -45,7 +52,16 @@ export const Cards = () => {
     dispatch(cardsThunks.addNewCard(newCard));
   };
 
-  const deleteCardHandler = (cardId: string) => {
+  const deleteCardModalHandler = (cardId: string, question: string) => {
+    dispatch(cardsActions.setCardId({ cardId }));
+    dispatch(
+      cardsActions.setQuestionNameForDelete({ questionNameForDelete: question })
+    );
+    setIsDeleteCardModal(true);
+  };
+
+  const deleteCardHandler = () => {
+    setIsDeleteCardModal(false);
     dispatch(cardsThunks.deleteCard(cardId));
   };
 
@@ -67,10 +83,6 @@ export const Cards = () => {
       grade: value,
     };
     dispatch(cardsThunks.updateGradeCard(payload));
-  };
-
-  const addNewCardModalHandler = () => {
-    setIsAddCardModal(true);
   };
 
   const editCardModalHandler = (
@@ -174,7 +186,9 @@ export const Cards = () => {
                               alt="Edit icon"
                             />
                             <img
-                              onClick={() => deleteCardHandler(row._id)}
+                              onClick={() =>
+                                deleteCardModalHandler(row._id, row.question)
+                              }
                               src={trash}
                               alt="Trash icon"
                             />
@@ -201,6 +215,12 @@ export const Cards = () => {
           isOpen={isEditCardModal}
           title={"Edit card"}
           updateCardHandler={updateCardHandler}
+        />
+        <DeleteCardModal
+          setIsOpen={setIsDeleteCardModal}
+          isOpen={isDeleteCardModal}
+          title={"Delete card"}
+          deleteCardHandler={deleteCardHandler}
         />
       </>
     </div>

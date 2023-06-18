@@ -41,6 +41,12 @@ export const EditCardModal: FC<EditCardModalType> = ({
     setAnswer(e.currentTarget.value);
   };
 
+  const handleSave = () => {
+    updateCardHandler(question, answer);
+    setAnswer("");
+    setQuestion("");
+  };
+
   return (
     <BasicModal setIsOpen={setIsOpen} isOpen={isOpen}>
       <div>
@@ -60,10 +66,7 @@ export const EditCardModal: FC<EditCardModalType> = ({
         <Button onClick={() => setIsOpen(false)} variant={"outlined"}>
           Cancel
         </Button>
-        <Button
-          onClick={() => updateCardHandler(question, answer)}
-          variant="contained"
-        >
+        <Button onClick={handleSave} variant="contained">
           Save
         </Button>
       </div>
