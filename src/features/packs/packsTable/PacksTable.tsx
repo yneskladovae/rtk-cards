@@ -10,23 +10,21 @@ import { MappedPacks } from "features/packs/packsTable/mappedPacks/MappedPacks";
 
 export const PacksTable = () => {
   return (
-    <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead style={{ background: "#EFEFEF" }}>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="center">Cards</TableCell>
-              <TableCell align="center">Last Updated</TableCell>
-              <TableCell align="center">Created by</TableCell>
-              <TableCell align="center">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <MappedPacks />
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead style={{ background: "#EFEFEF" }}>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell align="center">Cards</TableCell>
+            <TableCell align="center">Last Updated</TableCell>
+            <TableCell align="center">Created by</TableCell>
+            <TableCell align="center">Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <MappedPacks />
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };

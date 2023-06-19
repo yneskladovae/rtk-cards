@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { cardsActions, cardsThunks } from "features/cards/cards.slice";
@@ -18,7 +18,6 @@ import Rating from "@mui/material/Rating";
 import { formatDate } from "common/utils";
 import { AddCardModal } from "components/modal/cardModal/AddCardModal";
 import { EditCardModal } from "components/modal/cardModal/EditCardModal";
-import { packsActions } from "features/packs/packs.slice";
 import { DeleteCardModal } from "components/modal/deleteModal/DeleteCardModal";
 
 export const Cards = () => {
@@ -30,15 +29,21 @@ export const Cards = () => {
   const [value, setValue] = React.useState<number | null>(0);
   const dispatch = useAppDispatch();
   const cards = useAppSelector((state) => state.cards);
+  const cardsTotalCount = useAppSelector(
+    (state) => state.cards.cardsTotalCount
+  );
+
   const cardsUserId = useAppSelector((state) => state.cards.packUserId);
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      dispatch(cardsThunks.getCards({ cardsPack_id: id }));
+      dispatch(
+        cardsThunks.getCards({ cardsPack_id: id, pageCount: cardsTotalCount })
+      );
       dispatch(cardsActions.setCardsPackId({ cardsPackId: id }));
     }
-  }, [dispatch]);
+  }, [dispatch, cardsTotalCount]);
 
   const addNewCardModalHandler = () => {
     setIsAddCardModal(true);
