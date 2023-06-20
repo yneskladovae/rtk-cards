@@ -87,14 +87,14 @@ export const Cards = () => {
     dispatch(cardsThunks.updateCard(payload));
   };
 
-  const updateGradeCardHandler = (value: number | null, cardId: string) => {
-    setValue(value);
-    const payload = {
-      card_id: cardId,
-      grade: value,
-    };
-    dispatch(cardsThunks.updateGradeCard(payload));
-  };
+  // const updateGradeCardHandler = (value: number | null, cardId: string) => {
+  //   setValue(value);
+  //   const payload = {
+  //     card_id: cardId,
+  //     grade: value,
+  //   };
+  //   dispatch(cardsThunks.updateGradeCard(payload));
+  // };
 
   const editCardModalHandler = (
     cardId: string,
@@ -190,11 +190,14 @@ export const Cards = () => {
                       </TableCell>
                       <TableCell className={s.gradeBlock} align="center">
                         <Rating
-                          name="simple-controlled"
+                          name="read-only"
                           value={row.grade}
-                          onChange={(event, value) =>
-                            updateGradeCardHandler(value, row._id)
-                          }
+                          readOnly
+                          defaultValue={row.grade}
+                          precision={0.1}
+                          // onChange={(event, value) =>
+                          //   updateGradeCardHandler(value, row._id)
+                          // }
                         />
                         {userId === row.user_id && (
                           <div className={s.iconsBlock}>

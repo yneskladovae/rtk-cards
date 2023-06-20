@@ -62,9 +62,10 @@ const updateGradeCard = createAppAsyncThunk<any, any>(
   async (arg, thunkAPI) => {
     const { dispatch, getState } = thunkAPI;
     const cardsPackId = getState().cards.cardsPackId;
+    const pageCount = getState().cards.pageCount;
     return thunkTryCatch(thunkAPI, async () => {
       await cardsAPI.updateGradeCard(arg);
-      dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }));
+      dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId, pageCount }));
     });
   }
 );
@@ -125,9 +126,6 @@ export const slice = createSlice({
       state.packUpdated = action.payload.cardsData.packUpdated;
       state.packName = action.payload.cardsData.packName;
     });
-    // .addCase(updateCard.fulfilled, (state, action) => {
-    //
-    // });
   },
 });
 
