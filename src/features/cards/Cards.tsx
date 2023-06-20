@@ -26,6 +26,7 @@ export const Cards = () => {
   const [isDeleteCardModal, setIsDeleteCardModal] = useState<boolean>(false);
   const userId = useAppSelector((state) => state.auth.profile?._id);
   const cardId = useAppSelector((state) => state.cards.cardId);
+  const cardsPackId = useAppSelector((state) => state.cards.cardsPackId);
   const [value, setValue] = React.useState<number | null>(0);
   const dispatch = useAppDispatch();
   const cards = useAppSelector((state) => state.cards);
@@ -106,6 +107,9 @@ export const Cards = () => {
     dispatch(cardsActions.setCurrCardAnswer({ currCardAnswer: answer }));
   };
 
+  // if (cards?.cards?.length === 0 && userId !== cardsUserId)
+  //   return <p className={s.emptyCardsText}>This pack is empty.</p>;
+
   return (
     <div className={s.cardsBlock}>
       <BackToPackListLink />
@@ -115,36 +119,46 @@ export const Cards = () => {
             <div>
               <h1 className={s.maimHeader}>{cards.packName}</h1>
             </div>
-            <div className={s.emptyCardsContainer}>
-              <p className={s.emptyCardsText}>
-                This pack is empty. Click add new card to fill this pack
-              </p>
-              <button
-                onClick={addNewCardModalHandler}
-                className={s.emptyCardsButton}
-              >
-                Add new card
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div className={s.titleAndButton}>
-              <h1 className={s.maimHeader}>{cards.packName}</h1>
-              {userId === cardsUserId ? (
+            {userId !== cardsUserId ? (
+              <div className={s.emptyCardsContainer}>
+                <p className={s.emptyCardsText}>This pack is empty.</p>
+              </div>
+            ) : (
+              <div className={s.emptyCardsContainer}>
+                <p className={s.emptyCardsText}>
+                  This pack is empty. Click add new card to fill this pack
+                </p>
                 <button
                   onClick={addNewCardModalHandler}
                   className={s.emptyCardsButton}
                 >
                   Add new card
                 </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div>
+            <div className={s.titleAndButton}>
+              <h1 className={s.maimHeader}>{cards.packName}</h1>
+              {userId === cardsUserId ? (
+                <div>
+                  <Link to={`/learn/${cardsPackId}`}>
+                    <button className={s.emptyCardsButton}>
+                      Learn to pack
+                    </button>
+                  </Link>
+                  <button
+                    onClick={addNewCardModalHandler}
+                    className={s.emptyCardsButton}
+                  >
+                    Add new card
+                  </button>
+                </div>
               ) : (
-                <button
-                  // onClick={addNewCardHandler}
-                  className={s.emptyCardsButton}
-                >
-                  Learn to pack
-                </button>
+                <Link to={`/learn/${cardsPackId}`}>
+                  <button className={s.emptyCardsButton}>Learn to pack</button>
+                </Link>
               )}
             </div>
             <TableContainer component={Paper}>
