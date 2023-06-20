@@ -4,11 +4,12 @@ import { BackToPackListLink } from "components/backToPackListLink/BackToPackList
 import { cardsThunks } from "features/cards/cards.slice";
 import { useParams } from "react-router-dom";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { CardsType } from "features/cards/cards.api";
 
-interface Card {
+type Card = {
   name: string;
   checked: boolean;
-}
+};
 
 export const Learn = () => {
   const dispatch = useAppDispatch();
@@ -17,9 +18,24 @@ export const Learn = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [grade, setGrade] = useState<number>(3);
   const { id } = useParams();
-  // const cardsTotalCount = useAppSelector(
-  //   (state) => state.cards.cardsTotalCount
-  // );
+
+  // const getCard = (cards: CardsType[]) => {
+  //   const sum = cards.reduce(
+  //     (acc, card) => acc + (6 - card.grade) * (6 - card.grade),
+  //     0
+  //   );
+  //   const rand = Math.random() * sum;
+  //   const res = cards.reduce(
+  //     (acc: { sum: number; id: number }, card, i) => {
+  //       const newSum = acc.sum + (6 - card.grade) * (6 - card.grade);
+  //       return { sum: newSum, id: newSum < rand ? i : acc.id };
+  //     },
+  //     { sum: 0, id: -1 }
+  //   );
+  //   console.log("test: ", sum, rand, res);
+  //
+  //   return cards[res.id + 1];
+  // };
 
   const isShowOnClickHandler = () => {
     setIsShow(true);
@@ -36,18 +52,22 @@ export const Learn = () => {
   };
 
   const getNextQuestion = () => {
-    if (cards.cards) {
-      // const randomIndex = Math.floor(Math.random() * cards.cards.length - 1);
-      // console.log(randomIndex);
-      setIndex(index + 1);
+    if (
+      cards.cards &&
+      cards.cards.length > 0 &&
+      cards.cards.length <= cards.cards.length
+    ) {
+      const getRandomIndex = Math.floor(Math.random() * cards.cards.length);
+      setIndex(getRandomIndex);
+      // setIndex(index + 1);
       setIsShow(false);
+      updateGradeCardHandler();
+      setGrade(3);
     }
-    updateGradeCardHandler();
-    setGrade(3);
   };
 
   const updateGradeCardHandler = () => {
-    if (cards.cards) {
+    if (cards.cards && cards.cards.length > 0) {
       const payload = {
         card_id: cards.cards[index]._id,
         grade: grade,
@@ -81,7 +101,7 @@ export const Learn = () => {
           Show answer
         </button>
         {isShow && cards.cards && cards.cards[index] && (
-          <p>
+          <div>
             <strong>Answer:</strong> {cards.cards && cards.cards[index].answer}
             <br />
             <div>Rate yourself:</div>
@@ -100,7 +120,7 @@ export const Learn = () => {
               ))}
             </div>
             <button onClick={getNextQuestion}>Next</button>
-          </p>
+          </div>
         )}
       </div>
     </div>
