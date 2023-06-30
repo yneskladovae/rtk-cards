@@ -32,6 +32,9 @@ export const MappedPacks = () => {
   }, [dispatch, params]);
 
   const deletePackHandler = () => {
+    // dispatch(packsThunks.deletePack(packId)).unwrap().then(()=>{
+    //   setDeleteModalOpen(false)
+    // });
     dispatch(packsThunks.deletePack(packId));
     setDeleteModalOpen(false);
   };

@@ -3,6 +3,8 @@ import { BasicModal } from "components/modal/BasicModal";
 import TextField from "@mui/material/TextField";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import Button from "@mui/material/Button";
+import closeIcon from "../../../assets/svg/closeIcon.svg";
+import s from "./AddPackModal.module.css";
 
 type AddPackModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,31 +37,48 @@ export const AddPackModal: FC<AddPackModalType> = ({
     setPackName("");
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <BasicModal setIsOpen={setIsOpen} isOpen={isOpen}>
       <div>
-        <h1>{title}</h1>
-        <TextField
-          value={packName}
-          onChange={(e) => packNameChangeHandler(e)}
-          variant={"standard"}
-          label={"Name pack"}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              value={isPrivate}
-              onChange={(e) => isPrivateChangeHandler(e)}
-            />
-          }
-          label="Private pack"
-        />
-        <Button onClick={() => setIsOpen(false)} variant={"outlined"}>
-          Cancel
-        </Button>
-        <Button onClick={handleSave} variant="contained">
-          Save
-        </Button>
+        <div className={s.modalHeader}>
+          <div className={s.modalTitle}>{title}</div>
+          <div>
+            <img onClick={handleClose} src={closeIcon} alt="Close button" />
+          </div>
+        </div>
+        <div>
+          <TextField
+            value={packName}
+            onChange={(e) => packNameChangeHandler(e)}
+            variant={"standard"}
+            label={"Name pack"}
+            style={{ width: "100%", marginTop: "10px" }}
+          />
+        </div>
+        <div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                value={isPrivate}
+                onChange={(e) => isPrivateChangeHandler(e)}
+                style={{ paddingTop: "15px" }}
+              />
+            }
+            label="Private pack"
+          />
+        </div>
+        <div className={s.modalBtns}>
+          <Button onClick={handleClose} variant={"outlined"}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave} variant="contained">
+            Save
+          </Button>
+        </div>
       </div>
     </BasicModal>
   );

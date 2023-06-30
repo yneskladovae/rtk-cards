@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   createBrowserRouter,
   Navigate,
@@ -14,7 +14,6 @@ import { Learn } from "features/learn/Learn";
 import Layout from "components/layout/Layout";
 import { ForgotPassword } from "features/auth/forgotPassword/ForgotPassword";
 import SetNewPassword from "features/auth/setNewPassword/SetNewPassword";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GlobalError } from "common/globalError/GlobalError";
 
